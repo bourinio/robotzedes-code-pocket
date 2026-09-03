@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="el">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#ffffff"/>
+<title>ROBOTZEDES – Robotics Code Pocket</title>
+<style>
+:root{
+  --blue:#0b67b2;
+  --blue2:#0875c7;
+  --pink:#f00087;
+  --pink2:#ff0080;
+  --text:#152038;
+  --muted:#8b8f98;
+  --bg:#ffffff;
+  --soft:#f7f8fb;
+  --line:#eceff4;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:#fff;color:var(--text);font-family:Arial,Helvetica,sans-serif}
+body{min-height:100vh}
+.app{
+  width:min(100%,760px);
+  margin:0 auto;
+  padding:22px 18px 118px;
+  background:
+    radial-gradient(circle at 50% -20%, #ffffff 0 38%, #fbfbfd 70%, #fff 100%);
+}
+.topbar{
+  display:grid;
+  grid-template-columns:48px 1fr 48px;
+  align-items:center;
+  gap:10px;
+  margin:12px 0 26px;
+}
+.iconbtn{
+  border:0;background:transparent;padding:0;width:48px;height:48px;
+  display:grid;place-items:center;cursor:pointer;
+}
+.menu-lines{width:32px}
+.menu-lines span{display:block;height:4px;border-radius:4px;background:var(--pink);margin:5px 0}
+.heart{
+  width:48px;height:48px;border-radius:50%;background:var(--pink);
+  color:#fff;font-size:28px;line-height:48px;text-align:center;font-weight:300;
+}
+.brand{display:flex;align-items:center;justify-content:center;gap:9px}
+.logo{width:82px;height:82px;flex:none}
+.wordmark{line-height:.96}
+.wordline{
+  font-size:clamp(25px,6vw,41px);
+  font-weight:1000;
+  letter-spacing:-1.8px;
+  white-space:nowrap;
+  font-family:Impact,"Arial Black",Arial,sans-serif;
+}
+.wordline .rb{color:var(--blue)}
+.wordline .rz{color:var(--pink)}
+.subtitle{font-size:clamp(13px,3vw,20px);font-weight:800;color:#1b5c9f;margin-top:7px}
+.edition{font-size:clamp(12px,2.8vw,18px);color:var(--pink);margin-top:7px}
+.searchbox{
+  height:78px;border:1.8px solid var(--blue);border-radius:22px;background:#fff;
+  display:grid;grid-template-columns:58px 1fr 58px;align-items:center;
+  box-shadow:0 6px 20px rgba(22,55,92,.10);
+  margin-bottom:26px;
+}
+.searchicon{font-size:36px;color:var(--pink);text-align:center;line-height:1;transform:rotate(-10deg)}
+.searchbox input{
+  border:0;outline:0;background:transparent;font-size:clamp(16px,3.6vw,24px);
+  color:#40454f;width:100%;
+}
+.searchbox input::placeholder{color:#92959d}
+.filter{font-size:31px;color:var(--pink);text-align:center;font-weight:700}
+.platform-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.platform{
+  min-height:280px;background:#fff;border-radius:23px;overflow:hidden;
+  box-shadow:0 8px 24px rgba(18,41,72,.13);display:flex;flex-direction:column;cursor:pointer;
+}
+.p-top{height:96px;position:relative}
+.p-corner{
+  width:118px;height:96px;border-bottom-right-radius:46px;
+  display:grid;place-items:center;color:#fff;
+}
+.blue .p-corner,.blue .p-bottom{background:linear-gradient(135deg,#075eaa,#0878c9)}
+.pink .p-corner,.pink .p-bottom{background:linear-gradient(135deg,#f00087,#f60074)}
+.picon{width:58px;height:58px}
+.p-body{padding:22px 20px 16px;flex:1}
+.p-name{
+  font-family:Impact,"Arial Black",Arial,sans-serif;
+  letter-spacing:.4px;font-size:clamp(21px,4vw,31px);margin-bottom:12px;
+}
+.blue .p-name{color:var(--blue)} .pink .p-name{color:var(--pink)}
+.p-desc{font-size:clamp(14px,2.7vw,19px);line-height:1.35;color:#555b65}
+.p-bottom{
+  height:54px;display:flex;align-items:center;justify-content:space-between;
+  color:white;padding:0 20px;font-weight:900;font-size:14px;
+}
+.arrow{font-size:34px;font-weight:300;line-height:1}
+.recent-head{
+  display:flex;align-items:center;justify-content:space-between;
+  margin:34px 0 16px;
+}
+.recent-left{display:flex;align-items:center;gap:12px;color:var(--blue)}
+.clock{
+  width:38px;height:38px;border:3px solid var(--pink);border-radius:50%;
+  position:relative;flex:none;
+}
+.clock:before{content:"";position:absolute;width:3px;height:11px;background:var(--pink);left:16px;top:6px;border-radius:2px}
+.clock:after{content:"";position:absolute;width:10px;height:3px;background:var(--pink);left:16px;top:16px;transform:rotate(35deg);transform-origin:left center;border-radius:2px}
+.recent-title{font-weight:1000;font-size:22px}
+.viewall{color:var(--pink);font-weight:900;font-size:14px}
+.recent-list{display:grid;gap:12px}
+.recent-item{
+  min-height:83px;background:#fff;border-radius:16px;border:1px solid var(--line);
+  box-shadow:0 5px 16px rgba(26,44,72,.11);display:grid;
+  grid-template-columns:56px 1fr 42px;align-items:center;gap:12px;padding:10px 14px;
+}
+.ricon{width:52px;height:52px;border-radius:8px;display:grid;place-items:center;overflow:hidden}
+.rtxt h3{margin:0 0 5px;font-size:17px}
+.rmeta{font-size:14px;color:var(--muted)}
+.rmeta .plat{font-weight:800}
+.rmeta .blueText{color:var(--blue)} .rmeta .pinkText{color:var(--pink)}
+.star{font-size:34px;color:var(--pink);font-weight:300;text-align:center}
+.bottomnav{
+  position:fixed;z-index:20;bottom:10px;left:50%;transform:translateX(-50%);
+  width:min(760px,calc(100% - 20px));height:94px;background:rgba(255,255,255,.98);
+  border:1px solid var(--line);border-radius:25px;box-shadow:0 8px 25px rgba(20,39,66,.15);
+  display:grid;grid-template-columns:repeat(5,1fr);padding:8px 8px 5px;
+}
+.navbtn{border:0;background:transparent;color:var(--blue);font-size:12px;font-weight:800;cursor:pointer}
+.navbtn .ico{font-size:30px;display:block;line-height:1.15;margin-bottom:4px}
+.navbtn.active{color:var(--pink);position:relative}
+.navbtn.active:before{
+  content:"";position:absolute;top:-9px;left:12%;right:12%;height:4px;border-radius:4px;background:var(--pink)
+}
+.back{font-size:14px;color:var(--blue);font-weight:900;margin:4px 2px 12px;cursor:pointer}
+.page-title{font-size:25px;font-weight:1000;color:var(--blue);margin:8px 0 17px}
+.category-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.category{
+  background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;
+  box-shadow:0 5px 16px rgba(25,44,71,.08);cursor:pointer
+}
+.category .ci{font-size:27px;margin-bottom:9px}.category .cn{font-size:15px;font-weight:900}.category .cc{font-size:12px;color:var(--muted);margin-top:5px}
+.cards{display:grid;gap:12px}
+.codecard{
+  background:#fff;border:1px solid var(--line);border-radius:18px;padding:15px;
+  box-shadow:0 5px 16px rgba(25,44,71,.08)
+}
+.codehead{display:flex;align-items:center;gap:11px}
+.codeicon{width:46px;height:46px;border-radius:12px;background:#f2f6fb;display:grid;place-items:center;font-size:23px}
+.codecard h3{margin:0 0 4px;font-size:16px}.smallmeta{font-size:12px;color:var(--muted)}
+.codeactions{display:flex;gap:8px;margin-top:12px}
+.codeactions button{border:0;border-radius:11px;padding:10px 12px;font-weight:900}
+.show{background:var(--blue);color:#fff;flex:1}.copy{background:#fff0f8;color:var(--pink)}.fav{width:43px;background:#fff5fa;color:var(--pink)}
+.codebox{display:none;background:#111827;border-radius:13px;padding:12px;margin-top:12px;overflow:auto}.codebox.on{display:block}
+pre{margin:0;color:#eef4ff;font:12px/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;white-space:pre}
+.info{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;line-height:1.55;color:#5b6370}
+@media(max-width:520px){
+  .app{padding-left:13px;padding-right:13px}
+  .topbar{grid-template-columns:38px 1fr 38px;gap:4px}
+  .iconbtn,.heart{width:38px;height:38px}.heart{line-height:38px;font-size:23px}
+  .menu-lines{width:26px}.logo{width:64px;height:64px}
+  .platform-grid{gap:12px}.platform{min-height:245px}.p-corner{width:92px;height:82px}.p-top{height:82px}.picon{width:48px;height:48px}
+  .p-body{padding:16px 14px 12px}.p-bottom{padding:0 14px;font-size:12px}
+  .recent-item{grid-template-columns:48px 1fr 36px;padding:9px 10px}.ricon{width:44px;height:44px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <button class="iconbtn" onclick="showMenu()" aria-label="Μενού">
+      <div class="menu-lines"><span></span><span></span><span></span></div>
+    </button>
+
+    <div class="brand">
+      <svg class="logo" viewBox="0 0 100 100" aria-label="Robotzedes logo">
+        <path fill="#0b67b2" d="M18 28h55l15 16v25L71 86H46V51H16z"/>
+        <path fill="#f00087" d="M16 58h23v28L16 70z"/>
+        <circle fill="#f00087" cx="40" cy="48" r="7"/>
+        <circle fill="#f00087" cx="63" cy="48" r="7"/>
+        <path fill="#0b67b2" d="M51 13h4v15h-4z"/>
+        <circle fill="#0b67b2" cx="53" cy="10" r="5"/>
+      </svg>
+      <div class="wordmark">
+        <div class="wordline"><span class="rb">ROBOT</span><span class="rz">ZEDES</span></div>
+        <div class="subtitle">Robotics Code Pocket</div>
+        <div class="edition">Complete Library Edition</div>
+      </div>
+    </div>
+
+    <button class="iconbtn" onclick="showFavorites()"><div class="heart">♡</div></button>
+  </div>
+
+  <div class="searchbox">
+    <div class="searchicon">⌕</div>
+    <input id="q" placeholder="Αναζήτηση κώδικα, αισθητήρα, ενέργειας..."/>
+    <div class="filter">☷</div>
+  </div>
+
+  <main id="main"></main>
+</div>
+
+<nav class="bottomnav">
+  <button class="navbtn active" data-nav="home" onclick="home()"><span class="ico">⌂</span>Αρχική</button>
+  <button class="navbtn" data-nav="cat" onclick="allCategories()"><span class="ico">▦</span>Κατηγορίες</button>
+  <button class="navbtn" data-nav="fav" onclick="showFavorites()"><span class="ico">🔖</span>Αγαπημένα</button>
+  <button class="navbtn" data-nav="dl" onclick="downloads()"><span class="ico">⇩</span>Λήψεις</button>
+  <button class="navbtn" data-nav="info" onclick="showInfo()"><span class="ico">ⓘ</span>Πληροφορίες</button>
+</nav>
+
+<script>
+const SNIPPETS=[{"platform": "Arduino", "category": "Βασικά", "icon": "💡", "title": "LED Blink", "hardware": "Arduino + LED", "code": "void setup(){pinMode(13,OUTPUT);} void loop(){digitalWrite(13,HIGH);delay(500);digitalWrite(13,LOW);delay(500);}"}, {"platform": "Arduino", "category": "Βασικά", "icon": "🔘", "title": "Κουμπί → LED", "hardware": "Button + LED", "code": "int b=digitalRead(2); digitalWrite(13,b?HIGH:LOW);"}, {"platform": "Arduino", "category": "Βασικά", "icon": "🔊", "title": "Buzzer tone", "hardware": "Buzzer", "code": "tone(8,1000); delay(300); noTone(8);"}, {"platform": "Arduino", "category": "Μοτέρ", "icon": "⚙️", "title": "Servo 0-90-180", "hardware": "Servo", "code": "s.write(0);delay(500);s.write(90);delay(500);s.write(180);"}, {"platform": "Arduino", "category": "Μοτέρ", "icon": "⚙️", "title": "DC motor μπροστά", "hardware": "L298N", "code": "digitalWrite(IN1,HIGH);digitalWrite(IN2,LOW);analogWrite(ENA,180);"}, {"platform": "Arduino", "category": "Μοτέρ", "icon": "⚙️", "title": "DC motor πίσω", "hardware": "L298N", "code": "digitalWrite(IN1,LOW);digitalWrite(IN2,HIGH);analogWrite(ENA,180);"}, {"platform": "Arduino", "category": "Μοτέρ", "icon": "⚙️", "title": "2 μοτέρ μπροστά", "hardware": "L298N + 2 motors", "code": "digitalWrite(IN1,HIGH);digitalWrite(IN2,LOW);digitalWrite(IN3,HIGH);digitalWrite(IN4,LOW);"}, {"platform": "Arduino", "category": "Μοτέρ", "icon": "⚙️", "title": "Stop 2 μοτέρ", "hardware": "L298N + 2 motors", "code": "digitalWrite(IN1,LOW);digitalWrite(IN2,LOW);digitalWrite(IN3,LOW);digitalWrite(IN4,LOW);"}, {"platform": "Arduino", "category": "Κίνηση", "icon": "🚗", "title": "Στροφή αριστερά", "hardware": "2 DC motors", "code": "leftMotor(80); rightMotor(180); delay(400);"}, {"platform": "Arduino", "category": "Κίνηση", "icon": "🚗", "title": "Στροφή δεξιά", "hardware": "2 DC motors", "code": "leftMotor(180); rightMotor(80); delay(400);"}, {"platform": "Arduino", "category": "Κίνηση", "icon": "🚗", "title": "Pivot αριστερά", "hardware": "2 DC motors", "code": "leftMotor(-150); rightMotor(150); delay(300);"}, {"platform": "Arduino", "category": "Κίνηση", "icon": "🚗", "title": "Pivot δεξιά", "hardware": "2 DC motors", "code": "leftMotor(150); rightMotor(-150); delay(300);"}, {"platform": "Arduino", "category": "Αισθητήρες", "icon": "📏", "title": "HC-SR04 απόσταση", "hardware": "HC-SR04", "code": "digitalWrite(TRIG,HIGH);delayMicroseconds(10);digitalWrite(TRIG,LOW); long t=pulseIn(ECHO,HIGH,30000); float cm=t*0.0343/2.0;"}, {"platform": "Arduino", "category": "Αισθητήρες", "icon": "🌡️", "title": "DHT11 θερμοκρασία/υγρασία", "hardware": "DHT11", "code": "#include <DHT.h>\nDHT dht(4,DHT11);\nfloat t=dht.readTemperature(); float h=dht.readHumidity();"}, {"platform": "Arduino", "category": "Αισθητήρες", "icon": "☀️", "title": "LDR φωτεινότητα", "hardware": "LDR", "code": "int light=analogRead(A0); if(light<300) digitalWrite(13,HIGH);"}, {"platform": "Arduino", "category": "Αισθητήρες", "icon": "🎚️", "title": "Potentiometer → PWM", "hardware": "Potentiometer", "code": "int v=analogRead(A0); analogWrite(9,map(v,0,1023,0,255));"}, {"platform": "Arduino", "category": "Αισθητήρες", "icon": "🌧️", "title": "Rain sensor", "hardware": "Rain sensor", "code": "int rain=analogRead(A0); if(rain<500) Serial.println(\"RAIN\");"}, {"platform": "Arduino", "category": "Αισθητήρες", "icon": "🔥", "title": "Flame sensor", "hardware": "Flame sensor", "code": "int flame=digitalRead(2); if(flame==LOW) tone(8,1200); else noTone(8);"}, {"platform": "Arduino", "category": "Αισθητήρες", "icon": "👂", "title": "Sound sensor", "hardware": "Sound sensor", "code": "int sound=analogRead(A0); if(sound>600) digitalWrite(13,HIGH);"}, {"platform": "Arduino", "category": "Line Follower", "icon": "➿", "title": "2-sensor line follower", "hardware": "2 IR sensors", "code": "int L=digitalRead(2),R=digitalRead(3); if(!L&&!R)forward(); else if(!L)left(); else if(!R)right(); else stopMotors();"}, {"platform": "Arduino", "category": "Line Follower", "icon": "➿", "title": "3-sensor line follower", "hardware": "3 IR sensors", "code": "int L=digitalRead(2),C=digitalRead(3),R=digitalRead(4); if(!C)forward(); else if(!L)left(); else if(!R)right();"}, {"platform": "Arduino", "category": "Line Follower", "icon": "➿", "title": "PID line follower", "hardware": "Analog line array", "code": "error=target-sensorValue; integral+=error; derivative=error-lastError; correction=Kp*error+Ki*integral+Kd*derivative; setMotors(base-correction,base+correction); lastError=error;"}, {"platform": "Arduino", "category": "Obstacle Avoidance", "icon": "🧱", "title": "Stop στα 10 cm", "hardware": "HC-SR04 + motors", "code": "float d=distanceCm(); if(d>0&&d<=10)stopMotors(); else forward();"}, {"platform": "Arduino", "category": "Obstacle Avoidance", "icon": "🧱", "title": "Αποφυγή εμποδίου", "hardware": "HC-SR04 + motors", "code": "float d=distanceCm(); if(d>0&&d<15){reverse();delay(300);right();delay(400);}else forward();"}, {"platform": "Arduino", "category": "Bluetooth", "icon": "📱", "title": "HC-05 τηλεχειρισμός", "hardware": "HC-05 + motors", "code": "if(Serial.available()){char c=Serial.read(); if(c=='F')forward(); if(c=='B')reverse(); if(c=='L')left(); if(c=='R')right(); if(c=='S')stopMotors();}"}, {"platform": "Arduino", "category": "Bluetooth", "icon": "📱", "title": "Bluetooth LED control", "hardware": "HC-05 + LED", "code": "if(Serial.available()){char c=Serial.read(); digitalWrite(13,c=='1'?HIGH:LOW);}"}, {"platform": "Arduino", "category": "Sumo", "icon": "🥋", "title": "Βασικό Sumo", "hardware": "Distance + edge sensors", "code": "if(edgeDetected()){reverse();delay(250);right();}else if(enemyDetected())attack();else searchEnemy();"}, {"platform": "Arduino", "category": "Soccer", "icon": "⚽", "title": "Βασική λογική Soccer", "hardware": "Ball sensor + motors", "code": "if(ballDetected())attackBall(); else if(nearBoundary())escapeBoundary(); else searchBall();"}, {"platform": "Arduino", "category": "Αυτοματισμοί", "icon": "🤖", "title": "Parking sensor", "hardware": "HC-SR04 + buzzer", "code": "float d=distanceCm(); int w=map(constrain((int)d,5,50),5,50,70,600); tone(8,1000);delay(50);noTone(8);delay(w);"}, {"platform": "Arduino", "category": "Αυτοματισμοί", "icon": "🤖", "title": "Φανάρι κυκλοφορίας", "hardware": "3 LEDs", "code": "digitalWrite(RED,HIGH);delay(3000);digitalWrite(RED,LOW);digitalWrite(GREEN,HIGH);delay(3000);digitalWrite(GREEN,LOW);digitalWrite(YELLOW,HIGH);delay(1000);"}, {"platform": "micro:bit", "category": "Βασικά", "icon": "❤️", "title": "Εμφάνιση καρδιάς", "hardware": "micro:bit", "code": "from microbit import *\ndisplay.show(Image.HEART)"}, {"platform": "micro:bit", "category": "Βασικά", "icon": "🔘", "title": "Button A", "hardware": "micro:bit", "code": "from microbit import *\nwhile True:\n    if button_a.was_pressed(): display.show(\"A\")"}, {"platform": "micro:bit", "category": "Βασικά", "icon": "🔘", "title": "Button B", "hardware": "micro:bit", "code": "from microbit import *\nwhile True:\n    if button_b.was_pressed(): display.show(\"B\")"}, {"platform": "micro:bit", "category": "Βασικά", "icon": "🫨", "title": "Shake", "hardware": "micro:bit", "code": "from microbit import *\nwhile True:\n    if accelerometer.was_gesture(\"shake\"): display.show(Image.SURPRISED)"}, {"platform": "micro:bit", "category": "Αισθητήρες", "icon": "🌡️", "title": "Θερμοκρασία", "hardware": "micro:bit", "code": "display.scroll(temperature())"}, {"platform": "micro:bit", "category": "Αισθητήρες", "icon": "🧭", "title": "Compass heading", "hardware": "micro:bit compass", "code": "compass.calibrate()\ndisplay.scroll(compass.heading())"}, {"platform": "micro:bit", "category": "Αισθητήρες", "icon": "☀️", "title": "Light level", "hardware": "micro:bit", "code": "print(display.read_light_level())"}, {"platform": "micro:bit", "category": "Αισθητήρες", "icon": "📐", "title": "Accelerometer X/Y/Z", "hardware": "micro:bit", "code": "print(accelerometer.get_x(),accelerometer.get_y(),accelerometer.get_z())"}, {"platform": "micro:bit", "category": "Ήχος", "icon": "🔊", "title": "Παίξε melody", "hardware": "micro:bit v2", "code": "import music\nmusic.play(music.POWER_UP)"}, {"platform": "micro:bit", "category": "Radio", "icon": "📡", "title": "Στείλε μήνυμα", "hardware": "2 micro:bits", "code": "import radio\nradio.on()\nradio.send(\"GO\")"}, {"platform": "micro:bit", "category": "Radio", "icon": "📡", "title": "Λάβε μήνυμα", "hardware": "2 micro:bits", "code": "import radio\nradio.on()\nmsg=radio.receive()\nif msg: display.scroll(msg)"}, {"platform": "micro:bit", "category": "Radio", "icon": "🎮", "title": "Ασύρματο τηλεχειριστήριο", "hardware": "2 micro:bits", "code": "if button_a.is_pressed(): radio.send(\"LEFT\")\nelif button_b.is_pressed(): radio.send(\"RIGHT\")\nelse: radio.send(\"STOP\")"}, {"platform": "micro:bit", "category": "Κίνηση", "icon": "🚗", "title": "Motor driver forward", "hardware": "micro:bit + motor driver", "code": "pin0.write_analog(700); pin1.write_digital(0); pin2.write_analog(700); pin8.write_digital(0)"}, {"platform": "micro:bit", "category": "Κίνηση", "icon": "🛑", "title": "Motor driver stop", "hardware": "micro:bit + motor driver", "code": "pin0.write_analog(0); pin2.write_analog(0)"}, {"platform": "micro:bit", "category": "Line Follower", "icon": "➿", "title": "2-sensor line follower", "hardware": "IR sensors + motor driver", "code": "L=pin13.read_digital();R=pin14.read_digital()\nif L==0 and R==0: forward()\nelif L==0:left()\nelif R==0:right()\nelse:stop()"}, {"platform": "micro:bit", "category": "Obstacle Avoidance", "icon": "🧱", "title": "Obstacle avoid logic", "hardware": "Distance sensor + motors", "code": "if distance_cm<15:\n    reverse();sleep(300);turn_right()\nelse: forward()"}, {"platform": "micro:bit", "category": "Sumo", "icon": "🥋", "title": "micro:bit Sumo logic", "hardware": "Line + distance sensors", "code": "if edge_detected(): reverse()\nelif enemy_detected(): attack()\nelse: search()"}, {"platform": "micro:bit", "category": "Soccer", "icon": "⚽", "title": "micro:bit Soccer remote", "hardware": "2 micro:bits + motors", "code": "msg=radio.receive()\nif msg==\"F\":forward()\nelif msg==\"L\":left()\nelif msg==\"R\":right()\nelif msg==\"K\":kick()"}, {"platform": "micro:bit", "category": "Αυτοματισμοί", "icon": "🤖", "title": "Alarm με tilt", "hardware": "micro:bit", "code": "if abs(accelerometer.get_x())>700: music.play(music.BA_DING)"}, {"platform": "micro:bit", "category": "Αυτοματισμοί", "icon": "🤖", "title": "Light alarm", "hardware": "micro:bit", "code": "if display.read_light_level()<30: display.show(Image.ANGRY)"}, {"platform": "ESP32", "category": "Βασικά", "icon": "💡", "title": "LED blink", "hardware": "ESP32", "code": "void setup(){pinMode(2,OUTPUT);} void loop(){digitalWrite(2,HIGH);delay(500);digitalWrite(2,LOW);delay(500);}"}, {"platform": "ESP32", "category": "Wi‑Fi", "icon": "📶", "title": "Σύνδεση Wi‑Fi", "hardware": "ESP32", "code": "#include <WiFi.h>\nWiFi.begin(\"SSID\",\"PASSWORD\");\nwhile(WiFi.status()!=WL_CONNECTED)delay(500);"}, {"platform": "ESP32", "category": "Wi‑Fi", "icon": "🌐", "title": "Web server LED", "hardware": "ESP32", "code": "WiFiServer server(80); // parse GET request and control LED"}, {"platform": "ESP32", "category": "Bluetooth", "icon": "📱", "title": "Bluetooth Serial", "hardware": "ESP32", "code": "#include \"BluetoothSerial.h\"\nBluetoothSerial SerialBT;\nSerialBT.begin(\"ESP32-Robot\");"}, {"platform": "ESP32", "category": "Bluetooth", "icon": "🎮", "title": "Bluetooth robot commands", "hardware": "ESP32 + motor driver", "code": "char c=SerialBT.read(); if(c=='F')forward(); else if(c=='B')reverse(); else if(c=='L')left(); else if(c=='R')right();"}, {"platform": "ESP32", "category": "Αισθητήρες", "icon": "🌡️", "title": "DHT11", "hardware": "ESP32 + DHT11", "code": "#include <DHT.h>\nDHT dht(4,DHT11);\nfloat t=dht.readTemperature();float h=dht.readHumidity();"}, {"platform": "ESP32", "category": "Αισθητήρες", "icon": "📏", "title": "HC-SR04", "hardware": "ESP32 + HC-SR04", "code": "long t=pulseIn(ECHO,HIGH,30000); float cm=t*0.0343/2;"}, {"platform": "ESP32", "category": "Αισθητήρες", "icon": "☀️", "title": "LDR", "hardware": "ESP32 + LDR", "code": "int light=analogRead(34); Serial.println(light);"}, {"platform": "ESP32", "category": "Αισθητήρες", "icon": "🎚️", "title": "Potentiometer", "hardware": "ESP32", "code": "int value=analogRead(34); int pwm=map(value,0,4095,0,255);"}, {"platform": "ESP32", "category": "PWM", "icon": "💡", "title": "LED dimming", "hardware": "ESP32 PWM", "code": "ledcAttach(2,5000,8); ledcWrite(2,128);"}, {"platform": "ESP32", "category": "Μοτέρ", "icon": "⚙️", "title": "Servo", "hardware": "ESP32 + Servo", "code": "#include <ESP32Servo.h>\nServo s; s.attach(18); s.write(90);"}, {"platform": "ESP32", "category": "Μοτέρ", "icon": "⚙️", "title": "2 DC motors", "hardware": "ESP32 + L298N", "code": "digitalWrite(IN1,HIGH);digitalWrite(IN2,LOW);digitalWrite(IN3,HIGH);digitalWrite(IN4,LOW);"}, {"platform": "ESP32", "category": "Line Follower", "icon": "➿", "title": "2 IR sensors", "hardware": "ESP32 + IR", "code": "int L=digitalRead(32),R=digitalRead(33); if(!L&&!R)forward(); else if(!L)left(); else if(!R)right(); else stopMotors();"}, {"platform": "ESP32", "category": "Line Follower", "icon": "➿", "title": "PID skeleton", "hardware": "ESP32 + analog line array", "code": "error=target-position;integral+=error;derivative=error-lastError;turn=Kp*error+Ki*integral+Kd*derivative;setMotors(base-turn,base+turn);lastError=error;"}, {"platform": "ESP32", "category": "Obstacle Avoidance", "icon": "🧱", "title": "Avoid obstacle", "hardware": "ESP32 + ultrasonic", "code": "if(distanceCm()<15){reverse();delay(300);right();delay(350);}else forward();"}, {"platform": "ESP32", "category": "IoT", "icon": "☁️", "title": "HTTP GET", "hardware": "ESP32 Wi‑Fi", "code": "#include <HTTPClient.h>\nHTTPClient http;http.begin(\"http://example.com/api\");int code=http.GET();String body=http.getString();http.end();"}, {"platform": "ESP32", "category": "IoT", "icon": "☁️", "title": "HTTP POST", "hardware": "ESP32 Wi‑Fi", "code": "http.addHeader(\"Content-Type\",\"application/json\");http.POST(\"{\\\"temp\\\":23}\");"}, {"platform": "ESP32", "category": "IoT", "icon": "📨", "title": "MQTT publish skeleton", "hardware": "ESP32 + MQTT", "code": "client.publish(\"robot/status\",\"online\");"}, {"platform": "ESP32", "category": "Sumo", "icon": "🥋", "title": "ESP32 Sumo logic", "hardware": "Distance + edge sensors", "code": "if(edgeDetected())escapeEdge(); else if(enemyDetected())attack(); else searchEnemy();"}, {"platform": "ESP32", "category": "Soccer", "icon": "⚽", "title": "ESP32 Soccer Bluetooth", "hardware": "Bluetooth + motors", "code": "char c=SerialBT.read(); if(c=='F')forward(); if(c=='L')left(); if(c=='R')right(); if(c=='K')kick();"}, {"platform": "ESP32", "category": "Αυτοματισμοί", "icon": "🤖", "title": "Temperature alarm", "hardware": "DHT11 + buzzer", "code": "float t=dht.readTemperature(); if(t>30)tone(BUZZER,1200);else noTone(BUZZER);"}, {"platform": "ESP32", "category": "Αυτοματισμοί", "icon": "🤖", "title": "Smart light", "hardware": "LDR + LED", "code": "int light=analogRead(34); digitalWrite(LED,light<1200?HIGH:LOW);"}, {"platform": "SPIKE Prime", "category": "Βασικά", "icon": "💡", "title": "Γράψε στη φωτεινή μήτρα", "hardware": "Hub", "code": "from hub import light_matrix\nimport runloop\nasync def main():\n    await light_matrix.write(\"HI\")\nrunloop.run(main())"}, {"platform": "SPIKE Prime", "category": "Βασικά", "icon": "❤️", "title": "Εμφάνιση καρδιάς", "hardware": "Hub", "code": "from hub import light_matrix\nlight_matrix.show_image(light_matrix.IMAGE_HEART)"}, {"platform": "SPIKE Prime", "category": "Βασικά", "icon": "🔘", "title": "Περίμενε LEFT button", "hardware": "Hub buttons", "code": "from hub import button\nimport runloop\nasync def main():\n    await runloop.until(lambda: button.pressed(button.LEFT))\nrunloop.run(main())"}, {"platform": "SPIKE Prime", "category": "Μοτέρ", "icon": "⚙️", "title": "Motor για μοίρες", "hardware": "Motor C", "code": "from hub import port\nimport runloop,motor\nasync def main():\n    await motor.run_for_degrees(port.C,180,500)\nrunloop.run(main())"}, {"platform": "SPIKE Prime", "category": "Μοτέρ", "icon": "⚙️", "title": "Motor absolute position", "hardware": "Motor C", "code": "await motor.run_to_absolute_position(port.C,90,400)"}, {"platform": "SPIKE Prime", "category": "Κίνηση", "icon": "🚗", "title": "Pair δύο μοτέρ", "hardware": "Motors A/E", "code": "motor_pair.pair(motor_pair.PAIR_1,port.A,port.E)"}, {"platform": "SPIKE Prime", "category": "Κίνηση", "icon": "🚗", "title": "Ευθεία 720°", "hardware": "Motors A/E", "code": "await motor_pair.move_for_degrees(motor_pair.PAIR_1,720,0,velocity=300)"}, {"platform": "SPIKE Prime", "category": "Κίνηση", "icon": "🚗", "title": "Κίνηση συνεχώς", "hardware": "Motors A/E", "code": "motor_pair.move(motor_pair.PAIR_1,0,velocity=300)"}, {"platform": "SPIKE Prime", "category": "Κίνηση", "icon": "🛑", "title": "Stop", "hardware": "Motors A/E", "code": "motor_pair.stop(motor_pair.PAIR_1)"}, {"platform": "SPIKE Prime", "category": "Κίνηση", "icon": "↩️", "title": "Στροφή αριστερά", "hardware": "Motors A/E", "code": "await motor_pair.move_for_degrees(motor_pair.PAIR_1,220,-100,velocity=180)"}, {"platform": "SPIKE Prime", "category": "Κίνηση", "icon": "↪️", "title": "Στροφή δεξιά", "hardware": "Motors A/E", "code": "await motor_pair.move_for_degrees(motor_pair.PAIR_1,220,100,velocity=180)"}, {"platform": "SPIKE Prime", "category": "Αισθητήρες", "icon": "📏", "title": "Distance Sensor", "hardware": "Sensor B", "code": "from hub import port\nimport distance_sensor\nd=distance_sensor.distance(port.B)\nprint(d)"}, {"platform": "SPIKE Prime", "category": "Αισθητήρες", "icon": "🎨", "title": "Color Sensor χρώμα", "hardware": "Sensor F", "code": "if color_sensor.color(port.F) is color.RED: print(\"RED\")"}, {"platform": "SPIKE Prime", "category": "Αισθητήρες", "icon": "◻️", "title": "Reflected light", "hardware": "Color Sensor F", "code": "reflection=color_sensor.reflection(port.F)\nprint(reflection)"}, {"platform": "SPIKE Prime", "category": "Αισθητήρες", "icon": "🔘", "title": "Force Sensor pressed", "hardware": "Force Sensor E", "code": "if force_sensor.pressed(port.E): print(\"pressed\")"}, {"platform": "SPIKE Prime", "category": "Obstacle Avoidance", "icon": "🧱", "title": "Stop πριν εμπόδιο", "hardware": "Distance B + motors", "code": "def close():\n    d=distance_sensor.distance(port.B)\n    return d>-1 and d<150\nmotor_pair.move(motor_pair.PAIR_1,0,velocity=250)\nawait runloop.until(close)\nmotor_pair.stop(motor_pair.PAIR_1)"}, {"platform": "SPIKE Prime", "category": "Obstacle Avoidance", "icon": "🧱", "title": "Αποφυγή εμποδίου", "hardware": "Distance B + motors", "code": "d=distance_sensor.distance(port.B)\nif d>-1 and d<150:\n    await motor_pair.move_for_degrees(motor_pair.PAIR_1,-180,0,velocity=250)\n    await motor_pair.move_for_degrees(motor_pair.PAIR_1,220,100,velocity=180)"}, {"platform": "SPIKE Prime", "category": "Line Follower", "icon": "➿", "title": "Μαύρο/λευκό line follower", "hardware": "Color F + motors", "code": "while True:\n    if color_sensor.color(port.F) is color.BLACK: motor_pair.move(motor_pair.PAIR_1,-35,velocity=220)\n    else: motor_pair.move(motor_pair.PAIR_1,35,velocity=220)\n    await runloop.sleep_ms(10)"}, {"platform": "SPIKE Prime", "category": "Line Follower", "icon": "➿", "title": "P line follower", "hardware": "Color F + motors", "code": "target=50;kp=1.2\nwhile True:\n    error=target-color_sensor.reflection(port.F)\n    steering=max(-100,min(100,int(kp*error)))\n    motor_pair.move(motor_pair.PAIR_1,steering,velocity=250)"}, {"platform": "SPIKE Prime", "category": "Line Follower", "icon": "➿", "title": "PID line follower", "hardware": "Color F + motors", "code": "target=50;kp=1.1;ki=0.0;kd=0.7;integral=0;last=0\nwhile True:\n    error=target-color_sensor.reflection(port.F);integral+=error;derivative=error-last\n    steering=max(-100,min(100,int(kp*error+ki*integral+kd*derivative)))\n    motor_pair.move(motor_pair.PAIR_1,steering,velocity=250);last=error"}, {"platform": "SPIKE Prime", "category": "Gyro", "icon": "🧭", "title": "Reset yaw", "hardware": "Hub motion sensor", "code": "motion_sensor.reset_yaw(0)"}, {"platform": "SPIKE Prime", "category": "Gyro", "icon": "🧭", "title": "Διάβασε yaw", "hardware": "Hub motion sensor", "code": "yaw=motion_sensor.tilt_angles()[0]/10\nprint(yaw)"}, {"platform": "SPIKE Prime", "category": "Gyro", "icon": "🧭", "title": "Στροφή ~90°", "hardware": "Hub + motors", "code": "motion_sensor.reset_yaw(0)\nmotor_pair.move(motor_pair.PAIR_1,100,velocity=140)\nawait runloop.until(lambda: motion_sensor.tilt_angles()[0]>=900)\nmotor_pair.stop(motor_pair.PAIR_1)"}, {"platform": "SPIKE Prime", "category": "Gyro", "icon": "🧭", "title": "Gyro straight P-control", "hardware": "Hub + motors", "code": "motion_sensor.reset_yaw(0)\nwhile True:\n    yaw=motion_sensor.tilt_angles()[0]/10\n    steering=int(max(-100,min(100,-1.2*yaw)))\n    motor_pair.move(motor_pair.PAIR_1,steering,velocity=300)"}, {"platform": "SPIKE Prime", "category": "Competition", "icon": "🏁", "title": "Calibration black/white", "hardware": "Color F", "code": "black=color_sensor.reflection(port.F)\nwhite=color_sensor.reflection(port.F)\ntarget=(black+white)//2"}, {"platform": "SPIKE Prime", "category": "Competition", "icon": "🏁", "title": "Reusable drive function", "hardware": "Motors A/E", "code": "async def drive(deg,speed=300):\n    await motor_pair.move_for_degrees(motor_pair.PAIR_1,deg,0,velocity=speed)"}, {"platform": "SPIKE Prime", "category": "Competition", "icon": "🏁", "title": "Reusable turn function", "hardware": "Motors A/E", "code": "async def turn(deg,steering,speed=180):\n    await motor_pair.move_for_degrees(motor_pair.PAIR_1,deg,steering,velocity=speed)"}, {"platform": "SPIKE Prime", "category": "Competition", "icon": "🏁", "title": "Mission template", "hardware": "Drive + attachment", "code": "async def mission():\n    await drive(800,400)\n    await turn(210,100)\n    await motor.run_for_degrees(port.C,180,500)\n    await drive(-800,450)"}, {"platform": "SPIKE Prime", "category": "Competition", "icon": "🏁", "title": "Mission selector", "hardware": "Hub buttons", "code": "while True:\n    if button.pressed(button.LEFT): await mission_1()\n    elif button.pressed(button.RIGHT): await mission_2()"}, {"platform": "SPIKE Prime", "category": "Soccer", "icon": "⚽", "title": "Soccer state machine", "hardware": "Drive + sensors", "code": "if state==\"SEARCH\": search_ball()\nelif state==\"ATTACK\": attack_ball()\nelif state==\"RECOVER\": escape_boundary()"}, {"platform": "SPIKE Prime", "category": "Sumo", "icon": "🥋", "title": "Sumo state machine", "hardware": "Distance + Color", "code": "if edge_detected(): await escape_edge()\nelif opponent_detected(): attack()\nelse: search()"}, {"platform": "SPIKE Prime", "category": "Attachments", "icon": "🦾", "title": "Άνοιγμα/κλείσιμο αρπάγης", "hardware": "Motor C", "code": "await motor.run_to_absolute_position(port.C,0,500)\nawait motor.run_to_absolute_position(port.C,90,500)\nawait motor.run_to_absolute_position(port.C,0,500)"}, {"platform": "SPIKE Prime", "category": "Attachments", "icon": "🦾", "title": "Attachment πάνω/κάτω", "hardware": "Motor C", "code": "await motor.run_for_degrees(port.C,180,500)\nawait motor.run_for_degrees(port.C,-180,500)"}, {"platform": "SPIKE Prime", "category": "Αυτοματισμοί", "icon": "🤖", "title": "Μέχρι κόκκινο και stop", "hardware": "Color F + motors", "code": "motor_pair.move(motor_pair.PAIR_1,0,velocity=250)\nawait runloop.until(lambda: color_sensor.color(port.F) is color.RED)\nmotor_pair.stop(motor_pair.PAIR_1)"}, {"platform": "SPIKE Prime", "category": "Αυτοματισμοί", "icon": "🤖", "title": "Μέχρι μαύρη γραμμή", "hardware": "Color F + motors", "code": "motor_pair.move(motor_pair.PAIR_1,0,velocity=250)\nawait runloop.until(lambda: color_sensor.color(port.F) is color.BLACK)\nmotor_pair.stop(motor_pair.PAIR_1)"}, {"platform": "Arduino", "category": "Αυτοματισμοί", "icon": "🤖", "title": "State machine skeleton", "hardware": "Any robot", "code": "switch(state){case SEARCH: search();break;case ATTACK:attack();break;case RECOVER:recover();break;}"}, {"platform": "Arduino", "category": "Αισθητήρες", "icon": "🧲", "title": "Hall sensor", "hardware": "Hall sensor", "code": "int hall=digitalRead(2); if(hall==LOW) Serial.println(\"MAGNET\");"}, {"platform": "Arduino", "category": "Αισθητήρες", "icon": "🕹️", "title": "Joystick X/Y", "hardware": "Joystick module", "code": "int x=analogRead(A0);int y=analogRead(A1);"}, {"platform": "Arduino", "category": "Μοτέρ", "icon": "🪜", "title": "Stepper 28BYJ-48", "hardware": "ULN2003 + stepper", "code": "#include <Stepper.h>\nStepper st(2048,8,10,9,11); st.step(512);"}, {"platform": "ESP32", "category": "Wi‑Fi", "icon": "📡", "title": "Wi‑Fi RSSI", "hardware": "ESP32", "code": "Serial.println(WiFi.RSSI());"}, {"platform": "ESP32", "category": "IoT", "icon": "🕒", "title": "NTP time skeleton", "hardware": "ESP32 Wi‑Fi", "code": "configTime(7200,0,\"pool.ntp.org\");"}, {"platform": "ESP32", "category": "Bluetooth", "icon": "📲", "title": "BLE characteristic skeleton", "hardware": "ESP32 BLE", "code": "// Create BLE server, service and characteristic; notify on value change"}, {"platform": "micro:bit", "category": "Radio", "icon": "📻", "title": "Radio channel", "hardware": "2 micro:bits", "code": "radio.config(channel=7)\nradio.on()"}, {"platform": "micro:bit", "category": "Αισθητήρες", "icon": "🧲", "title": "Compass north alert", "hardware": "micro:bit", "code": "h=compass.heading()\nif h<20 or h>340: display.show(\"N\")"}, {"platform": "SPIKE Prime", "category": "Βασικά", "icon": "⏱️", "title": "Καθυστέρηση 1 sec", "hardware": "Hub", "code": "await runloop.sleep_ms(1000)"}, {"platform": "SPIKE Prime", "category": "Competition", "icon": "📦", "title": "Mission helper attachment", "hardware": "Motor C", "code": "async def arm(deg,speed=500):\n    await motor.run_for_degrees(port.C,deg,speed)"}, {"platform": "SPIKE Prime", "category": "Line Follower", "icon": "🛑", "title": "Line follow μέχρι κόκκινο", "hardware": "Color F + motors", "code": "while color_sensor.color(port.F) is not color.RED:\n    # line follower correction here\n    await runloop.sleep_ms(10)\nmotor_pair.stop(motor_pair.PAIR_1)"}];
+const MAIN=document.getElementById("main");
+const Q=document.getElementById("q");
+const platformOrder=["Arduino","micro:bit","SPIKE Prime","ESP32"];
+const platformCount=p=>SNIPPETS.filter(x=>x.platform===p).length;
+const catIcon={"Βασικά":"💡","Κίνηση":"🚗","Μοτέρ":"⚙️","Αισθητήρες":"📡","Line Follower":"➿","Obstacle Avoidance":"🧱","Bluetooth":"📱","Wi‑Fi":"📶","IoT":"☁️","PWM":"🎚️","Radio":"📻","Gyro":"🧭","Competition":"🏁","Attachments":"🦾","Soccer":"⚽","Sumo":"🥋","Αυτοματισμοί":"🤖","Ήχος":"🔊"};
+const esc=s=>String(s).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;");
+const favKey=x=>x.platform+"|"+x.category+"|"+x.title;
+let state={page:"home",platform:null,category:null};
+
+function platformIcon(p){
+ if(p==="Arduino") return `<svg class="picon" viewBox="0 0 100 70"><path fill="none" stroke="white" stroke-width="8" d="M48 35C37 15 13 13 8 30c-5 18 17 30 31 14l18-20c13-15 35-9 35 10 0 18-23 26-35 11L45 31"/><path stroke="white" stroke-width="6" d="M18 35h18M27 26v18M70 35h17"/></svg>`;
+ if(p==="micro:bit") return `<svg class="picon" viewBox="0 0 100 70"><rect x="8" y="11" width="84" height="48" rx="17" fill="none" stroke="white" stroke-width="6"/><circle cx="27" cy="35" r="5" fill="white"/><circle cx="73" cy="35" r="5" fill="white"/></svg>`;
+ if(p==="SPIKE Prime") return `<svg class="picon" viewBox="0 0 100 70"><path fill="white" d="M26 24l24-12 24 12-24 12zM26 24v28l24 13V36zM74 24v28L50 65V36z"/><circle cx="38" cy="22" r="4" fill="#f00087"/><circle cx="50" cy="16" r="4" fill="#f00087"/><circle cx="62" cy="22" r="4" fill="#f00087"/></svg>`;
+ return `<svg class="picon" viewBox="0 0 100 70"><rect x="28" y="12" width="44" height="46" rx="4" fill="none" stroke="white" stroke-width="5"/><path stroke="white" stroke-width="4" d="M39 34q11-12 22 0M43 40q7-7 14 0M49 46h2"/><path stroke="white" stroke-width="4" d="M18 18h10M18 28h10M18 38h10M18 48h10M72 18h10M72 28h10M72 38h10M72 48h10"/></svg>`;
+}
+function setNav(n){document.querySelectorAll(".navbtn").forEach(b=>b.classList.toggle("active",b.dataset.nav===n))}
+function getFav(){return new Set(JSON.parse(localStorage.getItem("robotzedes_fav")||"[]"))}
+function saveFav(s){localStorage.setItem("robotzedes_fav",JSON.stringify([...s]))}
+
+function home(){
+ state={page:"home",platform:null,category:null};Q.value="";setNav("home");
+ const cards=platformOrder.map((p,i)=>{
+   const cls=i%2===0?"blue":"pink";
+   const d=p==="Arduino"?"Κώδικες & Projects<br>για Arduino":
+           p==="micro:bit"?"Κώδικες & Projects<br>για micro:bit":
+           p==="SPIKE Prime"?"Κώδικες & Projects<br>για LEGO® SPIKE Prime":
+           "Κώδικες & Projects<br>για ESP32";
+   return `<section class="platform ${cls}" onclick="openPlatform('${p}')">
+    <div class="p-top"><div class="p-corner">${platformIcon(p)}</div></div>
+    <div class="p-body"><div class="p-name">${p.toUpperCase()}</div><div class="p-desc">${d}</div></div>
+    <div class="p-bottom"><span>ΔΕΣ ΚΩΔΙΚΕΣ</span><span class="arrow">›</span></div>
+   </section>`;
+ }).join("");
+ const recent=SNIPPETS.slice(0,3).map((x,i)=>{
+   const pink=x.platform!=="Arduino";
+   return `<div class="recent-item" onclick="openSingle(${i})">
+      <div class="ricon" style="background:${pink?'#f00087':'#0876b9'}">${platformIcon(x.platform)}</div>
+      <div class="rtxt"><h3>${x.title}</h3><div class="rmeta"><span class="plat ${pink?'pinkText':'blueText'}">${x.platform}</span> &nbsp;•&nbsp; ${x.category}</div></div>
+      <div class="star">☆</div>
+   </div>`;
+ }).join("");
+ MAIN.innerHTML=`<div class="platform-grid">${cards}</div>
+ <div class="recent-head"><div class="recent-left"><div class="clock"></div><div class="recent-title">ΠΡΟΣΦΑΤΑ</div></div><div class="viewall" onclick="showAllCodes()">ΠΡΟΒΟΛΗ ΟΛΩΝ ›</div></div>
+ <div class="recent-list">${recent}</div>`;
+}
+function openSingle(i){renderCards([SNIPPETS[i]],`<div class="back" onclick="home()">← Αρχική</div><div class="page-title">Κώδικας</div>`)}
+function openPlatform(p){
+ state={page:"platform",platform:p,category:null};Q.value="";setNav("cat");
+ const cats=[...new Set(SNIPPETS.filter(x=>x.platform===p).map(x=>x.category))];
+ MAIN.innerHTML=`<div class="back" onclick="home()">← Πλατφόρμες</div><div class="page-title">${p}</div><div class="category-grid">${
+ cats.map(c=>`<div class="category" onclick="openCategory('${c.replaceAll("'","\\'")}')"><div class="ci">${catIcon[c]||"📁"}</div><div class="cn">${c}</div><div class="cc">${SNIPPETS.filter(x=>x.platform===p&&x.category===c).length} κώδικες</div></div>`).join("")
+ }</div>`;
+}
+function openCategory(c){
+ state.category=c;
+ renderCards(SNIPPETS.filter(x=>x.platform===state.platform&&x.category===c),
+ `<div class="back" onclick="openPlatform('${state.platform}')">← Κατηγορίες</div><div class="page-title">${catIcon[c]||"📁"} ${c}</div>`);
+}
+function renderCards(items,head=""){
+ const fav=getFav();
+ MAIN.innerHTML=head+`<div class="cards">${items.length?items.map(x=>{
+   const k=favKey(x);
+   return `<article class="codecard"><div class="codehead"><div class="codeicon">${x.icon||"💻"}</div><div><h3>${x.title}</h3><div class="smallmeta">${x.platform} • ${x.category}${x.hardware? " • "+x.hardware:""}</div></div></div>
+   <div class="codeactions"><button class="show" onclick="toggleCode(this)">Δείξε κώδικα</button><button class="copy" onclick="copyCode(this)">Αντιγραφή</button><button class="fav" data-key="${esc(k)}" onclick="toggleFav(this)">${fav.has(k)?"★":"☆"}</button></div>
+   <div class="codebox"><pre>${esc(x.code)}</pre></div></article>`;
+ }).join(""):`<div class="info">Δεν βρέθηκαν κώδικες.</div>`}</div>`;
+}
+function toggleCode(b){const box=b.closest(".codecard").querySelector(".codebox");box.classList.toggle("on");b.textContent=box.classList.contains("on")?"Κρύψε κώδικα":"Δείξε κώδικα"}
+function copyCode(b){const t=b.closest(".codecard").querySelector("pre").innerText;const done=()=>{const old=b.textContent;b.textContent="Αντιγράφηκε ✓";setTimeout(()=>b.textContent=old,1000)};if(window.Android&&Android.copyText){Android.copyText(t);done();return}if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(done);return}const a=document.createElement("textarea");a.value=t;document.body.appendChild(a);a.select();document.execCommand("copy");a.remove();done()}
+function toggleFav(b){const s=getFav(),k=b.dataset.key;if(s.has(k))s.delete(k);else s.add(k);saveFav(s);b.textContent=s.has(k)?"★":"☆"}
+function showFavorites(){setNav("fav");Q.value="";const s=getFav();renderCards(SNIPPETS.filter(x=>s.has(favKey(x))),`<div class="page-title">Αγαπημένα</div>`)}
+function allCategories(){setNav("cat");Q.value="";const cats=[...new Set(SNIPPETS.map(x=>x.category))].sort();MAIN.innerHTML=`<div class="page-title">Κατηγορίες</div><div class="category-grid">${cats.map(c=>`<div class="category" onclick="globalCategory('${c.replaceAll("'","\\'")}')"><div class="ci">${catIcon[c]||"📁"}</div><div class="cn">${c}</div><div class="cc">${SNIPPETS.filter(x=>x.category===c).length} κώδικες</div></div>`).join("")}</div>`}
+function globalCategory(c){renderCards(SNIPPETS.filter(x=>x.category===c),`<div class="back" onclick="allCategories()">← Κατηγορίες</div><div class="page-title">${catIcon[c]||"📁"} ${c}</div>`)}
+function showAllCodes(){renderCards(SNIPPETS,`<div class="back" onclick="home()">← Αρχική</div><div class="page-title">Όλοι οι κώδικες</div>`)}
+function downloads(){setNav("dl");MAIN.innerHTML=`<div class="page-title">Λήψεις</div><div class="info">Οι κώδικες λειτουργούν offline μέσα στην εφαρμογή. Από κάθε κάρτα μπορείς να ανοίξεις και να αντιγράψεις τον κώδικα.</div>`}
+function showInfo(){setNav("info");MAIN.innerHTML=`<div class="page-title">Πληροφορίες</div><div class="info"><b>ROBOTZEDES – Robotics Code Pocket</b><br><br>Complete Library Edition με ${SNIPPETS.length} παραδείγματα για Arduino, micro:bit, LEGO® SPIKE Prime και ESP32.</div>`}
+function showMenu(){allCategories()}
+Q.addEventListener("input",()=>{
+ const s=Q.value.trim().toLowerCase();
+ if(!s){home();return}
+ setNav("");
+ renderCards(SNIPPETS.filter(x=>[x.title,x.platform,x.category,x.hardware,x.code].join(" ").toLowerCase().includes(s)),`<div class="page-title">Αποτελέσματα αναζήτησης</div>`)
+});
+home();
+</script>
+</body>
+</html>

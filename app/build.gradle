@@ -1,0 +1,12 @@
+plugins { id 'com.android.application' }
+android {
+ namespace 'gr.robotzedes.codepocket'
+ compileSdk 35
+ defaultConfig {
+   applicationId "gr.robotzedes.codepocket"
+   minSdk 24
+   targetSdk 35
+   versionCode 120
+   versionName "2.0-reference"
+ }
+}
