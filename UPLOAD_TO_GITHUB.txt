@@ -1,7 +1,0 @@
-1. Open your GitHub repository: bourinio/robotzedes-code-pocket
-2. Click Add file > Upload files.
-3. Drag ALL files and folders from this extracted folder into the upload page, including the hidden .github folder.
-4. Commit changes to main.
-5. Open Actions > Build Robotzedes APK.
-6. When the run is green, open it and download the artifact Robotzedes-Code-Pocket-APK.
-7. Unzip the downloaded artifact and install app-debug.apk on Android.

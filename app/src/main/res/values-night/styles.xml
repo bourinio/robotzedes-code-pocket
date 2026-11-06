@@ -1,0 +1,8 @@
+<resources>
+    <!-- Σκοτεινό θέμα: το WebView δίνει prefers-color-scheme: dark στη σελίδα -->
+    <style name="AppTheme" parent="android:style/Theme.Material.NoActionBar">
+        <item name="android:statusBarColor">#0B67B2</item>
+        <item name="android:navigationBarColor">#0B67B2</item>
+        <item name="android:windowBackground">#0B1220</item>
+    </style>
+</resources>
