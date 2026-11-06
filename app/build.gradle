@@ -6,7 +6,7 @@ android {
    applicationId "gr.robotzedes.codepocket"
    minSdk 24
    targetSdk 35
-   versionCode 120
-   versionName "2.0-reference"
+   versionCode 300
+   versionName "3.0"
  }
 }
