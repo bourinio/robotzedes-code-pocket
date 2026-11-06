@@ -84,6 +84,29 @@ distance_sensor.distance(port)     mm, -1 = τίποτα
 force_sensor.pressed(port) / force(port)
 motion_sensor.tilt_angles()        (yaw, pitch, roll) σε δέκατα μοίρας
 await runloop.sleep_ms(ms)    await runloop.until(συνάρτηση)` },
+{ cat: "Pinouts", t: "mBot & mBot2: θύρες και εξαρτήματα", lvl: 1, hw: "Makeblock mBot (mCore) / mBot2 (CyberPi)",
+  d: "Πού συνδέεται τι στο mBot και τι χρειάζεσαι για να το προγραμματίσεις.",
+  code: R`mBot (πλακέτα mCore, ATmega328P = σαν Arduino Uno)
+  Μοτέρ            M1 = αριστερό, M2 = δεξί   (MeDCMotor, -255..255)
+                   το αριστερό είναι ανάποδα: μπροστά = M1 -s, M2 +s
+  Θύρα 1–4 (RJ25)  Συνήθως: 2 = Line Follower, 3 = Ultrasonic
+  Ενσωματωμένα     2 RGB LED (pin 13), buzzer (pin 8), αισθητήρας φωτός (PORT_6),
+                   δέκτης IR, κουμπί πλακέτας (analogRead(A7) < 10)
+  Line Follower    readSensors(): S1_IN_S2_IN, S1_IN_S2_OUT,
+                   S1_OUT_S2_IN, S1_OUT_S2_OUT   (IN = πάνω στο μαύρο)
+  Προγραμματισμός  Arduino IDE + Makeblock-Libraries, πλακέτα «Arduino Uno»,
+                   #include <MeMCore.h>   (ή mBlock 5 με μπλοκ)
+
+mBot2 (CyberPi)
+  Μοτέρ με encoder EM1 (αριστερό), EM2 (δεξί)
+     mbot2.straight(cm)  mbot2.turn(μοίρες)  mbot2.forward(rpm, δευτ.)
+     mbot2.drive_power(L, R) / drive_speed(L, R) → το δεξί θέλει
+     αρνητική τιμή για να πάει μπροστά   ·   mbot2.EM_stop()
+  Ultrasonic 2     mbuild.ultrasonic2.get(1)          σε cm
+  Quad RGB sensor  mbuild.quad_rgb_sensor.get_offset_track(1)   -100..100
+  CyberPi          οθόνη, 5 RGB LED, ηχείο, μικρόφωνο, joystick, κουμπιά A/B
+  Προγραμματισμός  mBlock 5 → συσκευή CyberPi → Upload → Python`
+},
 { cat: "Συνδεσμολογίες", t: "L298N: σύνδεση μοτέρ", lvl: 1, hw: "L298N + 2 μοτέρ + μπαταρία",
   d: "Η πιο συνηθισμένη σύνδεση για ρομπότ με 2 τροχούς. Ίδια pins με όλα τα Arduino παραδείγματα της εφαρμογής.",
   code: R`L298N        Arduino UNO

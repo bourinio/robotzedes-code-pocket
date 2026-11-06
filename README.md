@@ -1,6 +1,6 @@
 # ROBOTZEDES – Robotics Code Pocket
 
-Android εφαρμογή (λειτουργεί offline) με **162 πλήρη, έτοιμα προγράμματα και οδηγούς** για εκπαιδευτική ρομποτική.
+Android εφαρμογή (λειτουργεί offline) με **184 πλήρη, έτοιμα προγράμματα και οδηγούς** για εκπαιδευτική ρομποτική.
 
 | Πλατφόρμα | Γλώσσα | Κώδικες |
 |---|---|---|
@@ -9,10 +9,11 @@ Android εφαρμογή (λειτουργεί offline) με **162 πλήρη, �
 | micro:bit | MicroPython **και** MakeCode JS | 25 |
 | DFRobot Maqueen | MakeCode JS (επέκταση maqueen) **και** MicroPython | 16 |
 | Arduino UNO/Nano | Arduino C++ | 34 |
+| Makeblock mBot (mCore) / mBot2 (CyberPi) | Arduino C++ / Python | 21 |
 | Arduino RC αυτοκίνητα (Bluetooth, IR, nRF24, Wi-Fi, gesture) | Arduino C++ | 12 |
 | ESP32 | Arduino C++ | 8 |
 | Raspberry Pi Pico | MicroPython | 8 |
-| Οδηγοί: pinouts, συνδεσμολογίες, PID, συχνά λάθη | – | 11 |
+| Οδηγοί: pinouts, συνδεσμολογίες, PID, συχνά λάθη | – | 12 |
 
 Θεματικές: βασικά, μοτέρ, κίνηση, αισθητήρες, line follower (απλός → PID), αποφυγή εμποδίων, sumo, radio, τηλεχειρισμός, αυτοματισμοί, οθόνες, παιχνίδια.
 

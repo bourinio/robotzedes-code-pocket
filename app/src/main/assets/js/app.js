@@ -9,6 +9,7 @@ const PLATFORMS = [
   { id: "maqueen",  name: "Maqueen",           em: "🚙", c: "#00a0e9", d: "Ρομπότ DFRobot Maqueen με micro:bit" },
   { id: "arduino",  name: "Arduino",           em: "♾️", c: "#00878f", d: "UNO/Nano: αισθητήρες, μοτέρ, ρομπότ" },
   { id: "rccar",    name: "Arduino RC Cars",   em: "🏎️", c: "#f00087", d: "Bluetooth, IR, nRF24 & Wi-Fi αυτοκίνητα" },
+  { id: "mbot",     name: "mBot / mBot2",      em: "🤖", c: "#1e88e5", d: "Makeblock mBot (Arduino) & mBot2 (Python)" },
   { id: "esp32",    name: "ESP32",             em: "📶", c: "#e7352c", d: "Wi-Fi & Bluetooth projects" },
   { id: "pico",     name: "Raspberry Pi Pico", em: "🍓", c: "#c51a4a", d: "MicroPython στο Pico / Pico W" },
   { id: "guides",   name: "Οδηγοί & Pinouts",  em: "📘", c: "#0b67b2", d: "Συνδεσμολογίες, θεωρία, συχνά λάθη" },
@@ -21,7 +22,7 @@ const CAT_ICON = {
   "Obstacle Avoidance": "🧱", "Sumo": "🥋", "Αυτοματισμοί": "🤖", "Ήχος": "🔊", "Radio": "📻",
   "Pins & Εξαρτήματα": "🔌", "Παιχνίδια": "🎮", "Τηλεχειρισμός": "🎮", "Servo & Εξαρτήματα": "🦾",
   "Οθόνες": "🖥️", "Bluetooth": "📱", "Υπέρυθρο (IR)": "🔴", "Ραδιοσυχνότητες (nRF24)": "📡",
-  "Wi-Fi": "📶", "Χειριστήρια": "🕹️", "PWM": "〰️", "Pinouts": "📌", "Συνδεσμολογίες": "🔧", "Θεωρία": "📐",
+  "Wi-Fi": "📶", "mBot2 (CyberPi)": "🟦", "Χειριστήρια": "🕹️", "PWM": "〰️", "Pinouts": "📌", "Συνδεσμολογίες": "🔧", "Θεωρία": "📐",
 };
 const LEVEL = { 1: "Αρχάριο", 2: "Μέσο", 3: "Προχωρημένο" };
 
@@ -169,7 +170,7 @@ function home() {
   const rec = recent.map(byKey).filter(Boolean).slice(0, 4);
   MAIN.innerHTML =
     '<section class="hero"><h1>Κώδικες εκπαιδευτικής ρομποτικής στην τσέπη σου</h1>' +
-    "<p>Έτοιμα, πλήρη προγράμματα για LEGO, micro:bit, Maqueen, Arduino, ESP32 και Pico. Δουλεύουν χωρίς internet: τα ανοίγεις, τα αντιγράφεις, τα τρέχεις.</p>" +
+    "<p>Έτοιμα, πλήρη προγράμματα για LEGO, micro:bit, Maqueen, mBot, Arduino, ESP32 και Pico. Δουλεύουν χωρίς internet: τα ανοίγεις, τα αντιγράφεις, τα τρέχεις.</p>" +
     '<div class="stats"><span class="stat">' + ALL.length + ' κώδικες</span><span class="stat">' + (PLATFORMS.length - 1) +
     ' πλατφόρμες</span><span class="stat">Python · C++ · MakeCode</span></div></section>' +
     (rec.length ? '<div class="sec"><h2>Πρόσφατα</h2></div>' + listHTML(rec, true) : "") +
@@ -358,6 +359,7 @@ function about() {
     "<li>SPIKE Prime: εφαρμογή SPIKE (v3) → νέο έργο Python</li>" +
     "<li>micro:bit & Maqueen: makecode.microbit.org (JavaScript) ή python.microbit.org</li>" +
     "<li>Arduino / ESP32: Arduino IDE 2 (για ESP32 εγκατάστησε «esp32 by Espressif»)</li>" +
+    "<li>mBot: Arduino IDE + βιβλιοθήκη Makeblock · mBot2: mBlock 5 (CyberPi, Upload, Python)</li>" +
     "<li>Pico: Thonny με MicroPython firmware</li></ul>" +
     '<span class="sub">LEGO®, MINDSTORMS®, SPIKE™ είναι εμπορικά σήματα του LEGO Group. micro:bit είναι σήμα του Micro:bit Educational Foundation. Η εφαρμογή δεν σχετίζεται με τους κατασκευαστές.</span></div>';
   MAIN.querySelectorAll("[data-theme]").forEach(b => b.onclick = () => {
