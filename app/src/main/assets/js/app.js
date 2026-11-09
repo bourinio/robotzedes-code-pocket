@@ -437,4 +437,12 @@ Q.addEventListener("input", () => {
 QX.addEventListener("click", () => { Q.value = ""; QX.style.display = "none"; go("#/"); });
 
 route();
+
+/* Εγκατάσταση ως εφαρμογή (PWA): μόνο όταν η σελίδα σερβίρεται από web server
+   (όχι μέσα στο APK, που φορτώνει από file://). */
+if ("serviceWorker" in navigator && /^https?:$/.test(location.protocol)) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("sw.js").catch(() => {});
+  });
+}
 })();

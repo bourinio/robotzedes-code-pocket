@@ -1,0 +1,19 @@
+{
+  "id": "./",
+  "name": "Robotzedes Code Pocket",
+  "short_name": "Robotzedes",
+  "description": "Έτοιμοι κώδικες εκπαιδευτικής ρομποτικής: LEGO EV3/SPIKE, micro:bit, Maqueen, mBot, Arduino, ESP32, Pico.",
+  "lang": "el",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#0b67b2",
+  "categories": ["education"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
