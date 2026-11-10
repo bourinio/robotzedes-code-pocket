@@ -4,14 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Διαχείριση – Προσβάσιμη Άρτα</title>
-  <link rel="stylesheet" href="/vendor/leaflet/leaflet.css">
-  <link rel="stylesheet" href="/css/app.css">
+  <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+  <link rel="stylesheet" href="css/app.css">
 </head>
 <body class="admin">
   <header class="topbar">
     <h1 class="brand"><span class="brand-icon" aria-hidden="true">♿</span> Διαχείριση</h1>
     <nav class="actions">
-      <a class="btn" href="/">← Στον χάρτη</a>
+      <a class="btn" href="index.html">← Στον χάρτη</a>
     </nav>
   </header>
 
@@ -36,6 +36,17 @@
           (αμαξίδιο, WC ΑμεΑ, θέσεις στάθμευσης ΑμεΑ, ηχητικά φανάρια). Μπορεί να ξαναγίνει χωρίς να δημιουργηθούν διπλότυπα.</p>
         <label class="check"><input type="checkbox" id="osm-pending" checked> Να μπουν πρώτα στα «Εκκρεμή» για έλεγχο</label>
         <button type="button" id="btn-osm" class="btn">Εισαγωγή τώρα</button>
+      </details>
+
+      <details class="card osm-box" id="backup-box" hidden>
+        <summary><strong>Αντίγραφο ασφαλείας</strong></summary>
+        <p class="muted">Σε αυτή την έκδοση τα δεδομένα αποθηκεύονται μόνο σε αυτόν τον browser. Κατέβαζε κάθε τόσο ένα
+          αντίγραφο (σημεία, λογαριασμοί, φωτογραφίες). Με την «Επαναφορά» μπορείς να τα μεταφέρεις και σε άλλον υπολογιστή.</p>
+        <div class="row">
+          <button type="button" id="btn-export" class="btn">⬇ Λήψη αντιγράφου</button>
+          <label class="btn" for="import-file" tabindex="0" role="button">⬆ Επαναφορά από αρχείο</label>
+          <input type="file" id="import-file" accept="application/json,.json" class="sr-only">
+        </div>
       </details>
     </section>
   </main>
@@ -65,8 +76,8 @@
 
   <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
 
-  <script src="/vendor/leaflet/leaflet.js"></script>
-  <script src="/js/common.js"></script>
-  <script src="/js/admin.js"></script>
+  <script src="vendor/leaflet/leaflet.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/admin.js"></script>
 </body>
 </html>

@@ -14,7 +14,8 @@
     "create-admin": "node scripts/create-admin.js",
     "seed:demo": "node scripts/seed-demo.js",
     "import:osm": "node scripts/import-osm.js",
-    "build:cloudflare": "node scripts/build-cloudflare.js"
+    "build:cloudflare": "node scripts/build-cloudflare.js",
+    "build:local": "node scripts/build-local.js"
   },
   "license": "MIT",
   "dependencies": {

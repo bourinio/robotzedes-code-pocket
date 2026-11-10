@@ -18,7 +18,7 @@ fs.writeFileSync(path.join(out, '_headers'), `/*
   X-Content-Type-Options: nosniff
   Referrer-Policy: same-origin
   X-Frame-Options: DENY
-  Content-Security-Policy: default-src 'self'; img-src 'self' data: blob: https://*.tile.openstreetmap.org; style-src 'self'; script-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'
+  Content-Security-Policy: default-src 'self'; img-src 'self' data: blob: https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com; style-src 'self'; script-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'
 `);
 
 const zip = path.join(root, 'arta-cloudflare.zip');

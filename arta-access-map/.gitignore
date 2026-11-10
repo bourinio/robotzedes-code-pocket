@@ -3,3 +3,5 @@ data/
 dist-cloudflare/
 arta-cloudflare.zip
 .wrangler/
+dist-local/
+Prosvasimi-Arta.zip

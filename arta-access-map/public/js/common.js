@@ -50,7 +50,33 @@ async function compressImage(file, maxSide = 1600, quality = 0.82) {
   }
 }
 
+/**
+ * Βάζει το υπόβαθρο χάρτη. Πρώτα OpenStreetMap· αν τα πλακίδια αποτυγχάνουν
+ * (π.χ. όταν η σελίδα ανοίγει απευθείας από αρχείο), αλλάζει σε CARTO.
+ */
+function addBaseLayer(map) {
+  const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; συντελεστές <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+  });
+  let errors = 0;
+  let loaded = 0;
+  osm.on('tileload', () => { loaded++; });
+  osm.on('tileerror', () => {
+    if (++errors < 3 || loaded > 0 || !map.hasLayer(osm)) return;
+    map.removeLayer(osm);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+      maxZoom: 19,
+      subdomains: 'abcd',
+      attribution: '&copy; συντελεστές <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    }).addTo(map);
+  });
+  osm.addTo(map);
+}
+
 async function api(path, { method = 'GET', body, form } = {}) {
+  // Τοπική έκδοση (χωρίς server): όλα γίνονται μέσα στον browser
+  if (window.LocalBackend) return window.LocalBackend.request(method, path, { body, form });
   const opts = { method, headers: { Accept: 'application/json' }, credentials: 'same-origin' };
   if (form) opts.body = form;
   else if (body !== undefined) {

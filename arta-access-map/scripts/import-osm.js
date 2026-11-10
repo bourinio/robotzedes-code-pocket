@@ -111,4 +111,4 @@ async function main() {
 }
 
 if (require.main === module) main().catch((e) => { console.error('Αποτυχία εισαγωγής:', e.message); process.exit(1); });
-module.exports = { toPoint, category, fetchOverpass, importInto };
+module.exports = { toPoint, category, fetchOverpass, importInto, QUERY, FALLBACK_NAME };

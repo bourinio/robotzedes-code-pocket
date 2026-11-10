@@ -32,10 +32,7 @@ function setupMap() {
     maxBounds: [[bounds.minLat, bounds.minLng], [bounds.maxLat, bounds.maxLng]],
     maxBoundsViscosity: 0.8,
   });
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '&copy; συντελεστές <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-  }).addTo(map);
+  addBaseLayer(map);
 
   map.on('click', (e) => {
     if (!state.picking) return;
@@ -247,7 +244,7 @@ function renderUser() {
   }
   fill(area, 
     h('button', { type: 'button', class: 'btn', onclick: openMine }, 'Οι υποβολές μου'),
-    state.user.role === 'admin' ? h('a', { class: 'btn', href: '/admin.html' }, 'Διαχείριση') : null,
+    state.user.role === 'admin' ? h('a', { class: 'btn', href: 'admin.html' }, 'Διαχείριση') : null,
     h('button', {
       type: 'button', class: 'btn ghost', title: state.user.email,
       onclick: async () => { await api('/auth/logout', { method: 'POST' }); state.user = null; renderUser(); toast('Αποσυνδέθηκες.'); },

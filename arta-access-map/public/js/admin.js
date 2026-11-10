@@ -8,7 +8,7 @@ let tab = 'pending';
   const [c, me] = await Promise.all([api('/config'), api('/auth/me')]);
   cfg = c;
   if (!me.user || me.user.role !== 'admin') {
-    fill($('#admin-gate'), 'Η σελίδα είναι μόνο για διαχειριστές. ', h('a', { href: '/', text: 'Σύνδεση από τον χάρτη' }));
+    fill($('#admin-gate'), 'Η σελίδα είναι μόνο για διαχειριστές. ', h('a', { href: 'index.html', text: 'Σύνδεση από τον χάρτη' }));
     return;
   }
   $('#admin-gate').hidden = true;
@@ -20,6 +20,7 @@ let tab = 'pending';
     render();
   }));
   setupEdit();
+  if (window.LocalBackend) setupBackup();
   $('#btn-osm').addEventListener('click', async (e) => {
     e.target.disabled = true;
     toast('Λήψη από το OpenStreetMap… (μπορεί να πάρει λίγο)', 60000);
@@ -64,7 +65,7 @@ async function render() {
 function miniMap(el, p) {
   requestAnimationFrame(() => {
     const m = L.map(el, { zoomControl: false, attributionControl: false, dragging: false, scrollWheelZoom: false }).setView([p.lat, p.lng], 17);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(m);
+    addBaseLayer(m);
     L.marker([p.lat, p.lng]).addTo(m);
   });
 }
@@ -142,7 +143,7 @@ function renderPointTable(points) {
     const q = norm(filter.value);
     fill(tbody, ...points.filter((p) => !q || norm(p.name + ' ' + p.address).includes(q)).map((p) =>
       h('tr', {},
-        h('td', {}, h('a', { href: `/#p${p.id}`, text: p.name })),
+        h('td', {}, h('a', { href: `index.html#p${p.id}`, text: p.name })),
         h('td', { text: cfg.categories[p.category] }),
         h('td', {}, levelBadge(p.level, cfg.levels)),
         h('td', { text: p.source === 'user' ? (p.author || '—') : p.source.toUpperCase() }),
@@ -192,4 +193,31 @@ function openEdit(p) {
   $$('[name=features]', form).forEach((c) => { c.checked = p.features.includes(c.value); });
   $('#form-edit .error').textContent = '';
   $('#dlg-edit').showModal();
+}
+
+// ---------- Αντίγραφο ασφαλείας (μόνο τοπική έκδοση) ----------
+function setupBackup() {
+  $('#backup-box').hidden = false;
+  $('#btn-export').addEventListener('click', async () => {
+    try {
+      const dump = await api('/admin/export');
+      const blob = new Blob([JSON.stringify(dump)], { type: 'application/json' });
+      const a = h('a', { href: URL.createObjectURL(blob), download: `prosvasimi-arta-${new Date().toISOString().slice(0, 10)}.json` });
+      document.body.append(a);
+      a.click();
+      a.remove();
+    } catch (e) { toast(e.message); }
+  });
+  const input = $('#import-file');
+  $('label[for=import-file]').addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); input.click(); } });
+  input.addEventListener('change', async () => {
+    const file = input.files[0];
+    input.value = '';
+    if (!file || !confirm('Η επαναφορά θα αντικαταστήσει ΟΛΑ τα τωρινά δεδομένα με αυτά του αρχείου. Συνέχεια;')) return;
+    try {
+      const r = await api('/admin/import', { method: 'POST', body: JSON.parse(await file.text()) });
+      toast(`Επαναφέρθηκαν ${r.points} σημεία και ${r.photos} φωτογραφίες.`, 6000);
+      render();
+    } catch (e) { toast(e instanceof SyntaxError ? 'Το αρχείο δεν είναι έγκυρο.' : e.message); }
+  });
 }
