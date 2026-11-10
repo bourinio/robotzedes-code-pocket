@@ -1,0 +1,38 @@
+/* Εξοπλισμός / πλατφόρμες ρομποτικής.
+ * k: κλειδί · n: όνομα · type: "ctrl" (προγραμματιζόμενος ελεγκτής/kit) ή "tool" (εργαλείο εργαστηρίου)
+ * price: [από, έως] € ενδεικτική τιμή ενός σετ για μία ομάδα · age: [από, έως] συνήθεις ηλικίες
+ * lang: γλώσσες προγραμματισμού · d: περιγραφή {el, en} */
+window.RA_EQUIPMENT = [
+  { k: "spike", n: "LEGO Education SPIKE Prime", type: "ctrl", price: [400, 500], age: [10, 16], lang: "Scratch, Python",
+    d: { el: "Hub με 6 θύρες, μοτέρ και αισθητήρες LEGO. Το βασικό kit για WRO RoboMission και FIRST LEGO League.", en: "6-port hub with LEGO motors and sensors. The standard kit for WRO RoboMission and FIRST LEGO League." } },
+  { k: "ev3", n: "LEGO MINDSTORMS EV3", type: "ctrl", price: [300, 450], age: [10, 18], lang: "EV3-G, MicroPython",
+    d: { el: "Παλαιότερο σύστημα LEGO (έχει αποσυρθεί), ακόμα επιτρέπεται σε πολλούς διαγωνισμούς.", en: "Older LEGO system (retired) that is still allowed in many competitions." } },
+  { k: "spikeess", n: "LEGO Education SPIKE Essential", type: "ctrl", price: [250, 350], age: [6, 10], lang: "Icon blocks, Scratch",
+    d: { el: "Για μικρές ηλικίες. Χρησιμοποιείται στο FIRST LEGO League Explore.", en: "For young learners. Used in FIRST LEGO League Explore." } },
+  { k: "microbit", n: "BBC micro:bit (+ robot kits)", type: "ctrl", price: [25, 120], age: [8, 15], lang: "MakeCode, MicroPython",
+    d: { el: "Φθηνή πλακέτα με οθόνη LED, αισθητήρες και radio. Με kit (π.χ. Maqueen) γίνεται ρομπότ.", en: "Low-cost board with LED display, sensors and radio. Becomes a robot with a kit such as Maqueen." } },
+  { k: "arduino", n: "Arduino UNO / Nano", type: "ctrl", price: [25, 100], age: [12, 99], lang: "C/C++",
+    d: { el: "Ανοιχτή πλατφόρμα για custom ρομπότ: line follower, sumo, folkrace.", en: "Open platform for custom robots: line followers, sumo, folkrace." } },
+  { k: "esp32", n: "ESP32", type: "ctrl", price: [10, 40], age: [13, 99], lang: "C/C++, MicroPython",
+    d: { el: "Γρήγορος μικροελεγκτής με Wi-Fi και Bluetooth.", en: "Fast microcontroller with Wi-Fi and Bluetooth." } },
+  { k: "pico", n: "Raspberry Pi Pico", type: "ctrl", price: [5, 20], age: [12, 99], lang: "MicroPython, C/C++",
+    d: { el: "Φθηνός μικροελεγκτής της Raspberry Pi.", en: "Low-cost microcontroller from Raspberry Pi." } },
+  { k: "raspi", n: "Raspberry Pi 4 / 5", type: "ctrl", price: [70, 150], age: [13, 99], lang: "Python, C++, ROS",
+    d: { el: "Υπολογιστής μίας πλακέτας για όραση με κάμερα και αυτόνομα οχήματα.", en: "Single-board computer for camera vision and autonomous vehicles." } },
+  { k: "mbot", n: "Makeblock mBot / mBot2", type: "ctrl", price: [100, 200], age: [8, 14], lang: "mBlock (Scratch), Python",
+    d: { el: "Έτοιμο ρομπότ για αρχάριους, βάση για τους διαγωνισμούς MakeX.", en: "Ready-made beginner robot and the base for MakeX competitions." } },
+  { k: "vexiq", n: "VEX IQ", type: "ctrl", price: [500, 900], age: [8, 14], lang: "VEXcode (Blocks, Python, C++)",
+    d: { el: "Πλαστικό σύστημα κατασκευής VEX για το VEX IQ Robotics Competition.", en: "VEX plastic building system for the VEX IQ Robotics Competition." } },
+  { k: "vexv5", n: "VEX V5", type: "ctrl", price: [1500, 3000], age: [11, 19], lang: "VEXcode (Blocks, Python, C++)",
+    d: { el: "Μεταλλικό σύστημα VEX για το VEX V5 Robotics Competition.", en: "VEX metal system for the VEX V5 Robotics Competition." } },
+  { k: "rev", n: "REV / goBILDA (FTC)", type: "ctrl", price: [1800, 4000], age: [12, 18], lang: "Java, Blocks",
+    d: { el: "Control Hub και μεταλλικά εξαρτήματα για το FIRST Tech Challenge.", en: "Control Hub and metal parts for the FIRST Tech Challenge." } },
+  { k: "frc", n: "FRC control system & Kit of Parts", type: "ctrl", price: [6000, 15000], age: [14, 18], lang: "Java, C++, Python, LabVIEW",
+    d: { el: "Σύστημα ελέγχου (roboRIO) και kit για τα μεγάλα ρομπότ του FIRST Robotics Competition.", en: "roboRIO control system and kit for the large robots of the FIRST Robotics Competition." } },
+  { k: "kipr", n: "KIPR Botball kit", type: "ctrl", price: [2000, 3000], age: [11, 18], lang: "C, C++, Python",
+    d: { el: "Το kit που δίνεται με την εγγραφή στο Botball.", en: "The kit that comes with Botball registration." } },
+  { k: "printer3d", n: { el: "3D εκτυπωτής", en: "3D printer" }, type: "tool", price: [250, 1200], age: [12, 99], lang: "",
+    d: { el: "Για custom σασί και εξαρτήματα. Πολύ χρήσιμος σε RoboCup, Eurobot και Future Engineers.", en: "For custom chassis and parts. Very useful for RoboCup, Eurobot and Future Engineers." } },
+  { k: "camera", n: { el: "Κάμερα / όραση (Pixy, OpenMV, Pi Camera)", en: "Camera / vision (Pixy, OpenMV, Pi Camera)" }, type: "tool", price: [30, 120], age: [13, 99], lang: "",
+    d: { el: "Αναγνώριση χρωμάτων και αντικειμένων.", en: "Colour and object recognition." } },
+];

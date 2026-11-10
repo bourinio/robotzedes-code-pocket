@@ -1,0 +1,11 @@
+{
+  "name": "RoboAtlas",
+  "short_name": "RoboAtlas",
+  "description": "Robotics competitions worldwide, team eligibility, equipment and suppliers.",
+  "start_url": "./#/",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f5f6fb",
+  "theme_color": "#4338ca",
+  "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
+}

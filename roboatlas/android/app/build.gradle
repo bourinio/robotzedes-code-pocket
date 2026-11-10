@@ -1,0 +1,14 @@
+plugins { id 'com.android.application' }
+android {
+  namespace 'app.roboatlas'
+  compileSdk 35
+  defaultConfig {
+    applicationId "app.roboatlas"
+    minSdk 24
+    targetSdk 35
+    versionCode 1
+    versionName "1.0"
+  }
+  // Η εφαρμογή είναι η ίδια web εφαρμογή του φακέλου roboatlas/web
+  sourceSets { main { assets.srcDirs = ['../../web'] } }
+}
