@@ -1,0 +1,24 @@
+{
+  "name": "arta-access-map",
+  "version": "1.0.0",
+  "description": "Διαδραστικός χάρτης προσβάσιμων σημείων της Άρτας",
+  "main": "server.js",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=22.13"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node --test test/*.test.js",
+    "create-admin": "node scripts/create-admin.js",
+    "seed:demo": "node scripts/seed-demo.js",
+    "import:osm": "node scripts/import-osm.js"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.22.3",
+    "leaflet": "^1.9.4",
+    "multer": "^2.5.0"
+  }
+}

@@ -1,0 +1,6 @@
+{"elements":[
+ {"type":"node","id":1,"lat":39.1601,"lon":20.9851,"tags":{"amenity":"pharmacy","name":"Φαρμακείο Δοκιμή","wheelchair":"yes","ramp":"yes"}},
+ {"type":"way","id":2,"center":{"lat":39.161,"lon":20.986},"tags":{"amenity":"townhall","name":"Δημαρχείο","wheelchair":"limited","toilets:wheelchair":"yes"}},
+ {"type":"node","id":3,"lat":39.159,"lon":20.984,"tags":{"amenity":"parking_space","parking_space":"disabled"}},
+ {"type":"node","id":4,"lat":39.158,"lon":20.983,"tags":{"wheelchair":"yes"}}
+]}

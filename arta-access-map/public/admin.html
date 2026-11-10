@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="el">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Διαχείριση – Προσβάσιμη Άρτα</title>
+  <link rel="stylesheet" href="/vendor/leaflet/leaflet.css">
+  <link rel="stylesheet" href="/css/app.css">
+</head>
+<body class="admin">
+  <header class="topbar">
+    <h1 class="brand"><span class="brand-icon" aria-hidden="true">♿</span> Διαχείριση</h1>
+    <nav class="actions">
+      <a class="btn" href="/">← Στον χάρτη</a>
+    </nav>
+  </header>
+
+  <main class="admin-main" id="admin-main">
+    <p id="admin-gate" class="muted">Φόρτωση…</p>
+
+    <section id="admin-app" hidden>
+      <div class="stats" id="stats" aria-live="polite"></div>
+
+      <div class="tabs" role="tablist" aria-label="Ενότητες">
+        <button type="button" role="tab" data-tab="pending" aria-selected="true">Εκκρεμή σημεία</button>
+        <button type="button" role="tab" data-tab="photos" aria-selected="false">Εκκρεμείς φωτογραφίες</button>
+        <button type="button" role="tab" data-tab="approved" aria-selected="false">Εγκεκριμένα σημεία</button>
+        <button type="button" role="tab" data-tab="rejected" aria-selected="false">Απορριφθέντα</button>
+      </div>
+
+      <div id="panel" class="panel"></div>
+    </section>
+  </main>
+
+  <dialog id="dlg-edit" aria-labelledby="edit-title">
+    <form method="dialog" class="dlg-close"><button aria-label="Κλείσιμο">×</button></form>
+    <h2 id="edit-title">Επεξεργασία σημείου</h2>
+    <form id="form-edit" novalidate>
+      <label class="field"><span>Όνομα</span><input name="name" required maxlength="120"></label>
+      <label class="field"><span>Διεύθυνση</span><input name="address" maxlength="200"></label>
+      <div class="two">
+        <label class="field"><span>Κατηγορία</span><select name="category"></select></label>
+        <label class="field"><span>Προσβασιμότητα</span>
+          <select name="level"><option value="full">Πλήρως</option><option value="partial">Μερικώς</option></select>
+        </label>
+      </div>
+      <fieldset class="field"><legend>Διαθέτει</legend><div id="edit-features" class="feature-grid"></div></fieldset>
+      <label class="field"><span>Περιγραφή</span><textarea name="description" rows="3" maxlength="2000"></textarea></label>
+      <div class="two">
+        <label class="field"><span>Πλάτος (lat)</span><input name="lat" inputmode="decimal"></label>
+        <label class="field"><span>Μήκος (lng)</span><input name="lng" inputmode="decimal"></label>
+      </div>
+      <p class="error" role="alert"></p>
+      <button class="btn primary wide" type="submit">Αποθήκευση</button>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+  <script src="/vendor/leaflet/leaflet.js"></script>
+  <script src="/js/common.js"></script>
+  <script src="/js/admin.js"></script>
+</body>
+</html>
