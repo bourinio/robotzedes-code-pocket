@@ -31,18 +31,6 @@ public class MainActivity extends Activity {
         }
 
         @JavascriptInterface
-        public void openUrl(final String url) {
-            if (url == null || !(url.startsWith("https://") || url.startsWith("http://"))) return;
-            runOnUiThread(() -> {
-                try {
-                    startActivity(new Intent(Intent.ACTION_VIEW, android.net.Uri.parse(url)));
-                } catch (Exception e) {
-                    Toast.makeText(MainActivity.this, "Δεν βρέθηκε browser", Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
-
-        @JavascriptInterface
         public void shareText(final String title, final String text) {
             runOnUiThread(() -> {
                 Intent send = new Intent(Intent.ACTION_SEND);

@@ -179,10 +179,7 @@ function home() {
       '<button class="plat" style="' + platStyle(p) + '" data-go="#/p/' + p.id + '">' +
       '<div class="em">' + p.em + '</div><div class="nm">' + esc(p.name) + '</div><div class="ds">' + esc(p.d) +
       '</div><div class="ct">' + (counts[p.id] || 0) + " " + (p.id === "guides" ? "οδηγοί" : "κώδικες") + " ›</div></button>").join("") +
-    "</div>" +
-    '<div class="sec"><h2>Διαγωνισμοί</h2><a href="#/comp">Όλοι ›</a></div>' +
-    '<button class="item" style="--cb:#f0008726" data-go="#/comp"><div class="ic">🏆</div><div class="tx"><h3>Επερχόμενοι διαγωνισμοί ρομποτικής</h3>' +
-    '<div class="mt">WRO, FIRST, VEX, RoboCup Junior και άλλοι · μπορεί να πάει η ομάδα σας;</div></div><div class="st">›</div></button>';
+    "</div>";
 }
 
 function platform(pid, cat, lvl) {
@@ -397,13 +394,7 @@ function shareText(title, t) {
   copyText(t);
 }
 
-function openUrl(u) {
-  if (window.Android && window.Android.openUrl) { window.Android.openUrl(u); return; }
-  window.open(u, "_blank", "noopener");
-}
-
 /* ---------- Router ---------- */
-const API = { main: MAIN, esc: esc, setNav: setNav, store: store, toast: toast, go: go, openUrl: openUrl };
 function route() {
   const h = location.hash || "#/";
   const [path, qs] = h.slice(1).split("?");
@@ -418,8 +409,6 @@ function route() {
   else if (parts[0] === "s") snippet(decodeURIComponent(parts[1]));
   else if (parts[0] === "fav") favorites();
   else if (parts[0] === "all") allCodes(params.c || null);
-  else if (parts[0] === "comp" && window.RZComp) parts[1] ? window.RZComp.detail(API, parts[1]) : window.RZComp.list(API, params.f || "");
-  else if (parts[0] === "team" && window.RZComp) window.RZComp.team(API);
   else if (parts[0] === "tools") tools();
   else if (parts[0] === "info") about();
   else if (parts[0] === "q") search(params.q || "");
