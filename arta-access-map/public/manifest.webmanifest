@@ -3,7 +3,7 @@
   "short_name": "Προσβάσιμη Άρτα",
   "description": "Χάρτης με τα προσβάσιμα σημεία της Άρτας",
   "lang": "el",
-  "start_url": "./index.html",
+  "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "background_color": "#0a3f7a",

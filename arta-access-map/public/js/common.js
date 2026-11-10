@@ -119,7 +119,7 @@ function fmtDate(s) {
   return isNaN(d) ? s : d.toLocaleDateString('el-GR', { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
-// Online έκδοση: service worker για εγκατάσταση ως εφαρμογή (όχι στην τοπική έκδοση / στο APK)
-if ('serviceWorker' in navigator && !window.LocalBackend && /^https?:$/.test(location.protocol)) {
+// Online/στατική έκδοση: service worker για εγκατάσταση ως εφαρμογή (όχι σε αρχείο file:// ούτε μέσα στο APK)
+if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol) && !window.AndroidApp && location.hostname !== 'appassets.androidplatform.net') {
   window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
 }

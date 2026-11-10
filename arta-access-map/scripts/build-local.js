@@ -38,6 +38,7 @@ const iconFix = `L.Icon.Default.imagePath = '';
 L.Icon.Default.mergeOptions({ iconUrl: '${dataUri('vendor/leaflet/images/marker-icon.png')}',
   iconRetinaUrl: '${dataUri('vendor/leaflet/images/marker-icon-2x.png')}', shadowUrl: '${dataUri('vendor/leaflet/images/marker-shadow.png')}' });`;
 
+const staticPages = {};
 for (const page of ['index.html', 'admin.html']) {
   let html = read(page);
   const swaps = [
@@ -52,8 +53,9 @@ for (const page of ['index.html', 'admin.html']) {
     if (!html.includes(from)) throw new Error(`${page}: δεν βρέθηκε ${from}`);
     html = html.replace(from, () => to);
   }
-  html = html.replace('  <link rel="manifest" href="manifest.webmanifest">\n', '');
   html = html.replace(/(src|href)="(icons\/[\w.-]+\.png)"/g, (_, attr, f) => `${attr}="${dataUri(f)}"`);
+  staticPages[page] = html; // η στατική έκδοση κρατά το manifest (εγκατάσταση στο κινητό)
+  html = html.replace('  <link rel="manifest" href="manifest.webmanifest">\n', '');
   if (/<(script|link)[^>]+(src|href)="(js|css|vendor|icons)\//.test(html)) throw new Error(`${page}: έμεινε εξωτερικό αρχείο`);
   fs.writeFileSync(path.join(out, page), html);
 }
@@ -89,3 +91,23 @@ const zip = path.join(root, 'Prosvasimi-Arta.zip');
 fs.rmSync(zip, { force: true });
 execFileSync('zip', ['-qr', zip, 'Prosvasimi-Arta'], { cwd: outBase });
 console.log(`Έτοιμο: ${path.relative(process.cwd(), zip)}  (άνοιξε το dist-local/Prosvasimi-Arta/index.html)`);
+
+// ---------- ΣΤΑΤΙΚΗ έκδοση για Cloudflare Pages / οποιοδήποτε hosting: ΕΝΑ zip, χωρίς ρυθμίσεις ----------
+// Ίδια με την τοπική (τα δεδομένα μένουν στη συσκευή του κάθε χρήστη) + manifest/εικονίδια/service worker
+// ώστε να εγκαθίσταται στο κινητό σαν εφαρμογή.
+const st = path.join(root, 'dist-static');
+fs.rmSync(st, { recursive: true, force: true });
+fs.mkdirSync(st, { recursive: true });
+for (const [page, html] of Object.entries(staticPages)) fs.writeFileSync(path.join(st, page), html);
+fs.cpSync(path.join(root, 'public', 'icons'), path.join(st, 'icons'), { recursive: true });
+for (const f of ['manifest.webmanifest', 'sw.js']) fs.copyFileSync(path.join(root, 'public', f), path.join(st, f));
+fs.writeFileSync(path.join(st, '_headers'), `/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: same-origin
+/sw.js
+  Cache-Control: no-cache
+`);
+const staticZip = path.join(root, 'arta-static.zip');
+fs.rmSync(staticZip, { force: true });
+execFileSync('zip', ['-qr', staticZip, '.'], { cwd: st });
+console.log(`Έτοιμο: ${path.relative(process.cwd(), staticZip)}  (στατική έκδοση: ανέβασμα με ένα zip)`);

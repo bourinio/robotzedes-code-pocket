@@ -10,3 +10,5 @@ android/build/
 android/app/build/
 android/local.properties
 Prosvasimi-Arta.apk
+dist-static/
+arta-static.zip
