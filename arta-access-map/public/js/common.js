@@ -51,27 +51,28 @@ async function compressImage(file, maxSide = 1600, quality = 0.82) {
 }
 
 /**
- * Βάζει το υπόβαθρο χάρτη. Πρώτα OpenStreetMap· αν τα πλακίδια αποτυγχάνουν
- * (π.χ. όταν η σελίδα ανοίγει απευθείας από αρχείο), αλλάζει σε CARTO.
+ * Υπόβαθρο χάρτη: OpenStreetMap. Σύμφωνα με την πολιτική χρήσης του, ο browser στέλνει τη διεύθυνση της σελίδας
+ * (Referer). Όταν η εφαρμογή ανοίγει ως τοπικό αρχείο δεν υπάρχει διεύθυνση και οι δρόμοι δεν φορτώνουν:
+ * τότε εμφανίζεται εξήγηση αντί για τα πλακίδια «Access blocked».
  */
 function addBaseLayer(map) {
-  const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  const URL_TPL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
+  const noReferer = location.protocol === 'file:' || location.origin === 'null';
+  const notice = (text) => {
+    const box = L.DomUtil.create('div', 'map-notice');
+    box.setAttribute('role', 'status');
+    box.textContent = text;
+    map.getContainer().appendChild(box);
+  };
+  if (noReferer) {
+    notice('Οι δρόμοι του χάρτη φαίνονται μόνο όταν η εφαρμογή ανοίγει από τη διεύθυνσή της στο ίντερνετ ή από την εφαρμογή κινητού. Τα σημεία λειτουργούν κανονικά.');
+    return;
+  }
+  L.tileLayer(URL_TPL, {
     maxZoom: 19,
+    referrerPolicy: 'strict-origin-when-cross-origin',
     attribution: '&copy; συντελεστές <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-  });
-  let errors = 0;
-  let loaded = 0;
-  osm.on('tileload', () => { loaded++; });
-  osm.on('tileerror', () => {
-    if (++errors < 3 || loaded > 0 || !map.hasLayer(osm)) return;
-    map.removeLayer(osm);
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-      maxZoom: 19,
-      subdomains: 'abcd',
-      attribution: '&copy; συντελεστές <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
-    }).addTo(map);
-  });
-  osm.addTo(map);
+  }).addTo(map);
 }
 
 async function api(path, { method = 'GET', body, form } = {}) {

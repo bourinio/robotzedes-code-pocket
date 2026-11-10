@@ -19,9 +19,9 @@ fs.writeFileSync(path.join(out, '_worker.js'), worker.replace('/*__SEED__*/ null
 fs.writeFileSync(path.join(out, '_routes.json'), JSON.stringify({ version: 1, include: ['/api/*', '/photos/*'], exclude: [] }, null, 2));
 fs.writeFileSync(path.join(out, '_headers'), `/*
   X-Content-Type-Options: nosniff
-  Referrer-Policy: same-origin
+  Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: DENY
-  Content-Security-Policy: default-src 'self'; img-src 'self' data: blob: https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com; style-src 'self'; script-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'
+  Content-Security-Policy: default-src 'self'; img-src 'self' data: blob: https://tile.openstreetmap.org https://*.tile.openstreetmap.org; style-src 'self'; script-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'
 `);
 
 const zip = path.join(root, 'arta-cloudflare.zip');

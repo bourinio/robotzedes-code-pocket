@@ -103,7 +103,7 @@ fs.cpSync(path.join(root, 'public', 'icons'), path.join(st, 'icons'), { recursiv
 for (const f of ['manifest.webmanifest', 'sw.js']) fs.copyFileSync(path.join(root, 'public', f), path.join(st, f));
 fs.writeFileSync(path.join(st, '_headers'), `/*
   X-Content-Type-Options: nosniff
-  Referrer-Policy: same-origin
+  Referrer-Policy: strict-origin-when-cross-origin
 /sw.js
   Cache-Control: no-cache
 `);

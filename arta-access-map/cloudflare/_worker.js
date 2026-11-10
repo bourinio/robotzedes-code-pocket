@@ -44,10 +44,10 @@ const SCHEMA = [
 
 const SECURITY_HEADERS = {
   'X-Content-Type-Options': 'nosniff',
-  'Referrer-Policy': 'same-origin',
+  'Referrer-Policy': 'strict-origin-when-cross-origin',
   'X-Frame-Options': 'DENY',
   'Content-Security-Policy':
-    "default-src 'self'; img-src 'self' data: blob: https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com; style-src 'self'; script-src 'self'; " +
+    "default-src 'self'; img-src 'self' data: blob: https://tile.openstreetmap.org https://*.tile.openstreetmap.org; style-src 'self'; script-src 'self'; " +
     "connect-src 'self'; frame-ancestors 'none'; base-uri 'self'",
 };
 

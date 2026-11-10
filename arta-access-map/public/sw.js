@@ -1,6 +1,6 @@
 // Service worker: επιτρέπει «Εγκατάσταση εφαρμογής» και κρατά την εφαρμογή διαθέσιμη χωρίς σύνδεση.
 // Προτιμά πάντα το δίκτυο (για να φαίνονται οι νέες εκδόσεις). Το API και οι φωτογραφίες του server δεν αποθηκεύονται.
-const CACHE = 'prosvasimi-arta-v2';
+const CACHE = 'prosvasimi-arta-v4';
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(['./', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png']).catch(() => {})));
   self.skipWaiting();
