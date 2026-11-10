@@ -20,6 +20,16 @@ let tab = 'pending';
     render();
   }));
   setupEdit();
+  $('#btn-osm').addEventListener('click', async (e) => {
+    e.target.disabled = true;
+    toast('Λήψη από το OpenStreetMap… (μπορεί να πάρει λίγο)', 60000);
+    try {
+      const r = await api('/admin/import-osm', { method: 'POST', body: { pending: $('#osm-pending').checked } });
+      toast(`Εισήχθησαν/ενημερώθηκαν ${r.imported} σημεία.`, 6000);
+      render();
+    } catch (ex) { toast(ex.message, 6000); }
+    e.target.disabled = false;
+  });
   render();
 })().catch((e) => toast(e.message));
 

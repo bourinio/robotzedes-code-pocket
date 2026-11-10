@@ -154,7 +154,7 @@ async function openPoint(id) {
   fileInput.addEventListener('change', async () => {
     if (!fileInput.files.length) return;
     const fd = new FormData();
-    for (const f of [...fileInput.files].slice(0, 3)) fd.append('photos', f);
+    for (const f of [...fileInput.files].slice(0, 3)) fd.append('photos', await compressImage(f));
     try {
       const r = await api(`/points/${id}/photos`, { method: 'POST', form: fd });
       toast(r.photos[0]?.status === 'approved' ? 'Η φωτογραφία προστέθηκε.' : 'Ευχαριστούμε! Η φωτογραφία θα εμφανιστεί μετά την έγκριση.');
@@ -319,9 +319,9 @@ function setupAdd() {
     if (!form.name.value.trim()) { err.textContent = 'Συμπλήρωσε το όνομα του σημείου.'; form.name.focus(); return; }
     const fd = new FormData(form);
     fd.delete('photos');
-    for (const f of [...form.photos.files].slice(0, 3)) fd.append('photos', f);
     const btn = form.querySelector('[type=submit]');
     btn.disabled = true;
+    for (const f of [...form.photos.files].slice(0, 3)) fd.append('photos', await compressImage(f));
     try {
       const { point } = await api('/points', { method: 'POST', form: fd });
       $('#dlg-add').close();

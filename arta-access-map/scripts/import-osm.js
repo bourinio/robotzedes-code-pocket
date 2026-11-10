@@ -72,20 +72,13 @@ function toPoint(el) {
   };
 }
 
-async function main() {
-  const args = process.argv.slice(2);
-  const pending = args.includes('--pending');
-  const fileIdx = args.indexOf('--file');
-  let data;
-  if (fileIdx >= 0) data = JSON.parse(fs.readFileSync(args[fileIdx + 1], 'utf8'));
-  else {
-    console.log('Λήψη δεδομένων από το OpenStreetMap…');
-    const res = await fetch(OVERPASS, { method: 'POST', body: new URLSearchParams({ data: QUERY }), headers: { 'User-Agent': 'arta-access-map/1.0' } });
-    if (!res.ok) throw new Error(`Overpass: HTTP ${res.status}`);
-    data = await res.json();
-  }
+async function fetchOverpass() {
+  const res = await fetch(OVERPASS, { method: 'POST', body: new URLSearchParams({ data: QUERY }), headers: { 'User-Agent': 'arta-access-map/1.0' } });
+  if (!res.ok) throw new Error(`Overpass: HTTP ${res.status}`);
+  return res.json();
+}
 
-  const db = openDb(path.join(process.env.DATA_DIR || path.join(__dirname, '..', 'data'), 'arta.db'));
+function importInto(db, data, pending) {
   const upsert = db.prepare(`
     INSERT INTO points (name, description, address, category, level, features, lat, lng, status, source, external_id)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'osm', ?)
@@ -99,8 +92,23 @@ async function main() {
     upsert.run(p.name, p.description, p.address, p.category, p.level, JSON.stringify(p.features), p.lat, p.lng, pending ? 'pending' : 'approved', p.externalId);
     n++;
   }
+  return n;
+}
+
+async function main() {
+  const args = process.argv.slice(2);
+  const pending = args.includes('--pending');
+  const fileIdx = args.indexOf('--file');
+  let data;
+  if (fileIdx >= 0) data = JSON.parse(fs.readFileSync(args[fileIdx + 1], 'utf8'));
+  else {
+    console.log('Λήψη δεδομένων από το OpenStreetMap…');
+    data = await fetchOverpass();
+  }
+  const db = openDb(path.join(process.env.DATA_DIR || path.join(__dirname, '..', 'data'), 'arta.db'));
+  const n = importInto(db, data, pending);
   console.log(`Εισήχθησαν/ενημερώθηκαν ${n} σημεία από το OpenStreetMap.`);
 }
 
 if (require.main === module) main().catch((e) => { console.error('Αποτυχία εισαγωγής:', e.message); process.exit(1); });
-module.exports = { toPoint, category };
+module.exports = { toPoint, category, fetchOverpass, importInto };

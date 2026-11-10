@@ -13,7 +13,8 @@
     "test": "node --test test/*.test.js",
     "create-admin": "node scripts/create-admin.js",
     "seed:demo": "node scripts/seed-demo.js",
-    "import:osm": "node scripts/import-osm.js"
+    "import:osm": "node scripts/import-osm.js",
+    "build:cloudflare": "node scripts/build-cloudflare.js"
   },
   "license": "MIT",
   "dependencies": {

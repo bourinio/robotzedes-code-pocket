@@ -407,6 +407,17 @@ function createApp({
     res.json({ ok: true });
   }));
 
+  admin.post('/import-osm', wrap(async (req, res) => {
+    const { fetchOverpass, importInto } = require('../scripts/import-osm');
+    let data;
+    try {
+      data = await fetchOverpass();
+    } catch {
+      throw new HttpError(502, 'Το OpenStreetMap δεν απάντησε. Δοκιμάστε ξανά αργότερα.');
+    }
+    res.json({ imported: importInto(db, data, Boolean(req.body?.pending)) });
+  }));
+
   api.use('/admin', admin);
   app.use('/api', api);
 

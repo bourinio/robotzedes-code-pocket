@@ -188,3 +188,5 @@ body.admin { display: block; }
 table { width: 100%; border-collapse: collapse; background: var(--surface); }
 th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; }
 th { font-size: .9rem; color: var(--muted); }
+.osm-box { margin-top: 24px; }
+.osm-box summary { cursor: pointer; min-height: 32px; }

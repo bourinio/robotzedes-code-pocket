@@ -78,7 +78,13 @@ public/                χάρτης (index.html) και διαχείριση (ad
 scripts/               create-admin, import-osm, seed-demo
 ```
 
-## Δημοσίευση
+## Δημοσίευση στο Cloudflare (χωρίς server)
+Υπάρχει έκδοση για **Cloudflare Pages + D1** (δωρεάν πρόγραμμα): `npm run build:cloudflare` φτιάχνει το
+`arta-cloudflare.zip` και οι οδηγίες είναι στο [ΟΔΗΓΙΕΣ-CLOUDFLARE.md](ΟΔΗΓΙΕΣ-CLOUDFLARE.md).
+Ο κώδικας του server γι' αυτή την έκδοση είναι στο `cloudflare/_worker.js` (ίδιο API με το `src/app.js`).
+Οι φωτογραφίες σμικρύνονται στον browser (έως 1600px) και αποθηκεύονται στη D1.
+
+## Δημοσίευση σε δικό σας server
 Τρέχει σε οποιονδήποτε server/VPS με Node.js. Χρειάζεται **μόνιμο δίσκο** για τον `DATA_DIR`
 (η βάση και οι φωτογραφίες ζουν εκεί) και HTTPS μπροστά (π.χ. nginx + Let's Encrypt).
 Τα πλακίδια χάρτη έρχονται από το tile.openstreetmap.org· για μεγάλη κίνηση δείτε την
