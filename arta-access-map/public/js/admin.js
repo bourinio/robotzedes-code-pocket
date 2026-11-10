@@ -201,8 +201,17 @@ function setupBackup() {
   $('#btn-export').addEventListener('click', async () => {
     try {
       const dump = await api('/admin/export');
+      const name = `prosvasimi-arta-${new Date().toISOString().slice(0, 10)}.json`;
+      if (window.AndroidApp?.saveFile) {
+        // Εφαρμογή Android: αποθήκευση στις Λήψεις
+        const bytes = new TextEncoder().encode(JSON.stringify(dump));
+        let bin = '';
+        for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
+        window.AndroidApp.saveFile(name, 'application/json', btoa(bin));
+        return;
+      }
       const blob = new Blob([JSON.stringify(dump)], { type: 'application/json' });
-      const a = h('a', { href: URL.createObjectURL(blob), download: `prosvasimi-arta-${new Date().toISOString().slice(0, 10)}.json` });
+      const a = h('a', { href: URL.createObjectURL(blob), download: name });
       document.body.append(a);
       a.click();
       a.remove();

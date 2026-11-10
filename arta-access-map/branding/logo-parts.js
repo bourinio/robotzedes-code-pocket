@@ -1,0 +1,29 @@
+// Τα κομμάτια του λογότυπου «Προσβάσιμη Άρτα» (viewBox 0 0 512 512).
+// Πινέζα χάρτη με το σύμβολο προσβασιμότητας, πάνω από το Γεφύρι της Άρτας.
+const BG = `<defs><linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+  <stop offset="0" stop-color="#1673d1"/><stop offset="1" stop-color="#0a3f7a"/></linearGradient></defs>`;
+const BG_RECT = `<rect width="512" height="512" fill="url(#bg)"/>`;
+
+// Γεφύρι: καμπύλο κατάστρωμα με μεγάλη κεντρική καμάρα και μικρότερες στα πλάγια
+const BRIDGE = `
+  <path fill-rule="evenodd" fill="#f2d49b" d="
+    M36,420 Q256,300 476,420 L476,446 L36,446 Z
+    M180,446 C180,390 214,362 256,362 C298,362 332,390 332,446 Z
+    M100,446 C100,420 114,406 132,406 C150,406 162,420 162,446 Z
+    M350,446 C350,420 362,406 380,406 C398,406 412,420 412,446 Z
+    M52,446 C52,434 58,428 66,428 C74,428 80,434 80,446 Z
+    M432,446 C432,434 438,428 446,428 C454,428 460,434 460,446 Z"/>
+  <path d="M36,420 Q256,300 476,420" fill="none" stroke="#c99a52" stroke-width="6"/>
+  <path d="M60,468 h120 M222,468 h70 M330,468 h120" stroke="#8cc4ff" stroke-width="8" stroke-linecap="round" opacity=".8"/>`;
+
+// Πινέζα με σύμβολο προσβασιμότητας (δυναμικός χρήστης αμαξιδίου)
+const PIN = `
+  <path fill="#ffffff" d="M256,40 C170,40 108,102 108,184 C108,280 256,384 256,384 C256,384 404,280 404,184 C404,102 342,40 256,40 Z"/>
+  <g transform="translate(166,86) scale(1.8)" fill="none" stroke="#0b5cad" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="58" cy="11" r="8.5" fill="#0b5cad" stroke="none"/>
+    <path d="M52,25 L45,52 L67,52 L76,74" stroke-width="9"/>
+    <path d="M50,33 L68,30" stroke-width="7"/>
+    <path d="M33,46 A22,22 0 1 0 64,72" stroke-width="7"/>
+  </g>`;
+
+module.exports = { BG, BG_RECT, BRIDGE, PIN };

@@ -1,0 +1,44 @@
+plugins { id 'com.android.application' }
+
+// Η εφαρμογή χρησιμοποιεί την ΤΟΠΙΚΗ έκδοση (χωρίς server): πρώτα `npm run build:local` στον φάκελο arta-access-map.
+def webDir = file('../../dist-local/android-assets')
+
+android {
+    namespace 'gr.arta.prosvasimi'
+    compileSdk 35
+    defaultConfig {
+        applicationId 'gr.arta.prosvasimi'
+        minSdk 24
+        targetSdk 35
+        versionCode 1
+        versionName '1.0'
+    }
+    signingConfigs {
+        // Σταθερό κλειδί, ώστε οι νέες εκδόσεις να εγκαθίστανται ΠΑΝΩ στις παλιές χωρίς να χάνονται τα δεδομένα.
+        // (Κλειδί για ιδιωτική διανομή – για Google Play χρειάζεται δικό σας, μυστικό κλειδί.)
+        shared {
+            storeFile file('../keystore/prosvasimi-arta.keystore')
+            storePassword 'android'
+            keyAlias 'prosvasimi-arta'
+            keyPassword 'android'
+        }
+    }
+    buildTypes {
+        debug { signingConfig signingConfigs.shared }
+        release { signingConfig signingConfigs.shared; minifyEnabled false }
+    }
+    sourceSets { main { assets.srcDirs = [webDir] } }
+    compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
+}
+
+dependencies {
+    implementation 'androidx.webkit:webkit:1.12.1'
+    implementation 'androidx.core:core:1.13.1'
+}
+
+tasks.named('preBuild') {
+    doFirst {
+        if (!new File(webDir, 'index.html').exists())
+            throw new GradleException("Λείπει η εφαρμογή web. Τρέξτε πρώτα: cd arta-access-map && npm install && npm run build:local")
+    }
+}

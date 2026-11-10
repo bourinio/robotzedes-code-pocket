@@ -52,11 +52,13 @@ for (const page of ['index.html', 'admin.html']) {
     if (!html.includes(from)) throw new Error(`${page}: δεν βρέθηκε ${from}`);
     html = html.replace(from, () => to);
   }
-  if (/<(script|link)[^>]+(src|href)="(js|css|vendor)\//.test(html)) throw new Error(`${page}: έμεινε εξωτερικό αρχείο`);
+  html = html.replace('  <link rel="manifest" href="manifest.webmanifest">\n', '');
+  html = html.replace(/(src|href)="(icons\/[\w.-]+\.png)"/g, (_, attr, f) => `${attr}="${dataUri(f)}"`);
+  if (/<(script|link)[^>]+(src|href)="(js|css|vendor|icons)\//.test(html)) throw new Error(`${page}: έμεινε εξωτερικό αρχείο`);
   fs.writeFileSync(path.join(out, page), html);
 }
 // Τα ξεχωριστά αρχεία δεν χρειάζονται πια
-for (const d of ['js', 'css', 'vendor']) fs.rmSync(path.join(out, d), { recursive: true, force: true });
+for (const d of ['js', 'css', 'vendor', 'icons', 'manifest.webmanifest', 'sw.js']) fs.rmSync(path.join(out, d), { recursive: true, force: true });
 
 fs.writeFileSync(path.join(out, 'ΔΙΑΒΑΣΕ-ΜΕ.txt'), `ΠΡΟΣΒΑΣΙΜΗ ΑΡΤΑ – τοπική έκδοση
 ================================
@@ -77,6 +79,11 @@ fs.writeFileSync(path.join(out, 'ΔΙΑΒΑΣΕ-ΜΕ.txt'), `ΠΡΟΣΒΑΣΙΜ�
 - Αν σβήσεις τα «δεδομένα ιστότοπων» του browser, χάνονται. Κράτα αντίγραφο ασφαλείας!
 - Μην αλλάζεις θέση στον φάκελο μετά, ούτε να ανοίγεις το index.html σε ιδιωτικό παράθυρο.
 `);
+
+// Αντίγραφο μόνο των σελίδων για την εφαρμογή Android (android/app → assets)
+const androidAssets = path.join(outBase, 'android-assets');
+fs.mkdirSync(androidAssets, { recursive: true });
+for (const page of ['index.html', 'admin.html']) fs.copyFileSync(path.join(out, page), path.join(androidAssets, page));
 
 const zip = path.join(root, 'Prosvasimi-Arta.zip');
 fs.rmSync(zip, { force: true });

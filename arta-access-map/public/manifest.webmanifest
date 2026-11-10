@@ -1,0 +1,16 @@
+{
+  "name": "Προσβάσιμη Άρτα",
+  "short_name": "Προσβάσιμη Άρτα",
+  "description": "Χάρτης με τα προσβάσιμα σημεία της Άρτας",
+  "lang": "el",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0a3f7a",
+  "theme_color": "#0b5cad",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
