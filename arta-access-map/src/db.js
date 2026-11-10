@@ -57,6 +57,11 @@ CREATE TABLE IF NOT EXISTS photos (
 );
 CREATE INDEX IF NOT EXISTS idx_photos_point ON photos(point_id);
 CREATE INDEX IF NOT EXISTS idx_photos_status ON photos(status);
+
+CREATE TABLE IF NOT EXISTS meta (
+  key   TEXT PRIMARY KEY,
+  value TEXT
+);
 `;
 
 function openDb(file) {

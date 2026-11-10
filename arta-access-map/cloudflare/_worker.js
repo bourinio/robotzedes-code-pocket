@@ -6,15 +6,18 @@ const CATEGORIES = {
   dimosia: 'Δημόσια υπηρεσία', ygeia: 'Υγεία', politismos: 'Πολιτισμός & αξιοθέατα', ekpaideusi: 'Εκπαίδευση',
   estiasi: 'Εστίαση & καφέ', emporio: 'Καταστήματα', trapeza: 'Τράπεζες & ΑΤΜ', parking: 'Θέση στάθμευσης ΑμεΑ',
   wc: 'Τουαλέτα ΑμεΑ', rampa: 'Ράμπα / πεζοδρόμιο', diavasi: 'Διάβαση / φανάρι με ήχο', parko: 'Πάρκο & πλατεία',
-  metafores: 'Συγκοινωνίες', allo: 'Άλλο',
+  metafores: 'Συγκοινωνίες', paralia: 'Παραλία', allo: 'Άλλο',
 };
 const FEATURES = {
   rampa: 'Ράμπα εισόδου', isopedo: 'Ισόπεδη είσοδος', anelkystiras: 'Ανελκυστήρας', wc: 'WC ΑμεΑ',
   parking: 'Στάθμευση ΑμεΑ', odigos: 'Οδηγός όδευσης τυφλών', ixitiko: 'Ηχητική σήμανση',
 };
 const LEVELS = { full: 'Πλήρως προσβάσιμο', partial: 'Μερικώς προσβάσιμο' };
-const BOUNDS = { minLat: 39.02, maxLat: 39.32, minLng: 20.82, maxLng: 21.18 };
+const BOUNDS = { minLat: 38.99, maxLat: 39.42, minLng: 20.75, maxLng: 21.1 };
 const CENTER = { lat: 39.1605, lng: 20.9856, zoom: 15 };
+
+// Γνωστά προσβάσιμα σημεία (seed/arta-points.json) – συμπληρώνονται από το scripts/build-cloudflare.js
+const SEED = /*__SEED__*/ null;
 
 const MAX_PHOTO_BYTES = 1_900_000; // όριο D1 για BLOB ~2 MB
 const MAX_PHOTOS = 3;
@@ -36,6 +39,7 @@ const SCHEMA = [
     reviewed_by INTEGER, created_at TEXT NOT NULL DEFAULT (datetime('now')), reviewed_at TEXT)`,
   `CREATE INDEX IF NOT EXISTS idx_photos_point ON photos(point_id)`,
   `CREATE INDEX IF NOT EXISTS idx_photos_status ON photos(status)`,
+  `CREATE TABLE IF NOT EXISTS meta (key TEXT PRIMARY KEY, value TEXT)`,
 ];
 
 const SECURITY_HEADERS = {
@@ -60,7 +64,7 @@ export default {
     try {
       if (url.pathname.startsWith('/api/') || url.pathname.startsWith('/photos/')) {
         if (!env.DB) throw new HttpError(500, 'Δεν έχει συνδεθεί η βάση D1 (binding με όνομα DB). Δείτε τις οδηγίες εγκατάστασης.');
-        if (!schemaReady) { await env.DB.batch(SCHEMA.map((s) => env.DB.prepare(s))); schemaReady = true; }
+        if (!schemaReady) { await env.DB.batch(SCHEMA.map((s) => env.DB.prepare(s))); await seedPoints(env.DB); schemaReady = true; }
         res = await handle(request, env, url);
       } else {
         res = await env.ASSETS.fetch(request);
@@ -74,6 +78,19 @@ export default {
     return res;
   },
 };
+
+/** Προσθέτει τα γνωστά σημεία μία φορά ανά έκδοση του seed (δεν ξαναβάζει όσα έσβησε ο διαχειριστής). */
+async function seedPoints(db) {
+  if (!SEED?.points?.length) return;
+  const row = await db.prepare("SELECT value FROM meta WHERE key = 'seed_version'").first();
+  if (row && Number(row.value) >= SEED.version) return;
+  const stmts = SEED.points.map((p) => db.prepare(`INSERT OR IGNORE INTO points
+      (name, description, address, category, level, features, lat, lng, status, source, external_id)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'approved', ?, ?)`)
+    .bind(p.name, p.description || '', p.address || '', p.category, p.level, JSON.stringify(p.features || []), p.lat, p.lng, p.source, p.externalId));
+  stmts.push(db.prepare("INSERT INTO meta (key, value) VALUES ('seed_version', ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value").bind(String(SEED.version)));
+  await db.batch(stmts);
+}
 
 // ---------------- βοηθήματα ----------------
 function json(data, status = 200, headers = {}) {

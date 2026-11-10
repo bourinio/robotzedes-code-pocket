@@ -8,6 +8,7 @@
 'use strict';
 (function () {
   const CONFIG = /*__CONFIG__*/ null;
+  const SEED = /*__SEED__*/ null;
   /*__OSM__*/
 
   const MAX_PHOTOS = 3;
@@ -55,6 +56,18 @@
         if (!window.indexedDB) throw new HttpError(500, 'Ο browser δεν υποστηρίζει τοπική αποθήκευση. Δοκιμάστε Chrome, Edge ή Firefox.');
         idb = await openIdb();
         data = (await idbReq('kv', 'readonly', (s) => s.get('data'))) || { seq: 0, users: [], points: [], photos: [] };
+        // Γνωστά προσβάσιμα σημεία: προστίθενται μία φορά ανά έκδοση (όσα έσβησε ο διαχειριστής δεν ξαναμπαίνουν)
+        if (SEED && (data.seedVersion || 0) < SEED.version) {
+          const have = new Set(data.points.map((p) => p.externalId).filter(Boolean));
+          for (const p of SEED.points) {
+            if (have.has(p.externalId)) continue;
+            data.points.push({ id: nextId(), name: p.name, description: p.description || '', address: p.address || '',
+              category: p.category, level: p.level, features: [...(p.features || [])], lat: p.lat, lng: p.lng,
+              status: 'approved', source: p.source, externalId: p.externalId, createdBy: null, rejectReason: null, createdAt: now() });
+          }
+          data.seedVersion = SEED.version;
+          await save();
+        }
         // προφόρτωση URL εγκεκριμένων φωτογραφιών
         for (const ph of data.photos) await photoUrl(ph.id);
       })();

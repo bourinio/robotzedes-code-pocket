@@ -82,11 +82,13 @@ function createApp({
   adminEmail = process.env.ADMIN_EMAIL,
   adminPassword = process.env.ADMIN_PASSWORD,
   secureCookies = process.env.NODE_ENV === 'production',
+  seed = true,
   trustProxy = process.env.TRUST_PROXY === '1',
 } = {}) {
   const db = openDb(dbFile);
   fs.mkdirSync(uploadDir, { recursive: true });
   auth.ensureAdmin(db, adminEmail, adminPassword);
+  if (seed) require('./seed').seedPoints(db);
 
   const app = express();
   app.disable('x-powered-by');

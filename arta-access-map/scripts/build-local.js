@@ -24,7 +24,8 @@ const osmCode = [
   osm.toPoint.toString(),
 ].join('\n  ');
 let backend = fs.readFileSync(path.join(root, 'local', 'local-backend.js'), 'utf8');
-backend = backend.replace('/*__CONFIG__*/ null', JSON.stringify(config)).replace('/*__OSM__*/', osmCode);
+const seed = JSON.parse(fs.readFileSync(path.join(root, 'seed', 'arta-points.json'), 'utf8'));
+backend = backend.replace('/*__CONFIG__*/ null', JSON.stringify(config)).replace('/*__SEED__*/ null', JSON.stringify(seed)).replace('/*__OSM__*/', osmCode);
 fs.writeFileSync(path.join(out, 'js', 'local-backend.js'), backend);
 
 for (const page of ['index.html', 'admin.html']) {

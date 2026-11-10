@@ -15,6 +15,7 @@ const CATEGORIES = {
   diavasi: 'Διάβαση / φανάρι με ήχο',
   parko: 'Πάρκο & πλατεία',
   metafores: 'Συγκοινωνίες',
+  paralia: 'Παραλία',
   allo: 'Άλλο',
 };
 
@@ -34,8 +35,8 @@ const LEVELS = {
   partial: 'Μερικώς προσβάσιμο',
 };
 
-// Όρια περιοχής Δήμου Αρταίων (κατά προσέγγιση) – δεν δεχόμαστε σημεία εκτός
-const BOUNDS = { minLat: 39.02, maxLat: 39.32, minLng: 20.82, maxLng: 21.18 };
+// Όρια περιοχής Δήμου Αρταίων (ορθογώνιο γύρω από τα όρια του δήμου, με μικρό περιθώριο)
+const BOUNDS = { minLat: 38.99, maxLat: 39.42, minLng: 20.75, maxLng: 21.1 };
 const CENTER = { lat: 39.1605, lng: 20.9856, zoom: 15 };
 
 module.exports = { CATEGORIES, FEATURES, LEVELS, BOUNDS, CENTER };

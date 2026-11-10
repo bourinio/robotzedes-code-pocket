@@ -146,7 +146,7 @@ function renderPointTable(points) {
         h('td', {}, h('a', { href: `index.html#p${p.id}`, text: p.name })),
         h('td', { text: cfg.categories[p.category] }),
         h('td', {}, levelBadge(p.level, cfg.levels)),
-        h('td', { text: p.source === 'user' ? (p.author || '—') : p.source.toUpperCase() }),
+        h('td', { text: p.source === 'user' ? (p.author || '—') : ({ osm: 'OpenStreetMap', sap: 'ΣΑΠ Δήμου', dimos: 'Δήμος Αρταίων' }[p.source] || p.source) }),
         h('td', { text: p.rejectReason || '' }),
         h('td', { class: 'nowrap' },
           h('button', { type: 'button', class: 'btn small', onclick: () => openEdit(p) }, 'Επεξεργασία'), ' ',

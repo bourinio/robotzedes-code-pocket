@@ -10,7 +10,10 @@ fs.rmSync(out, { recursive: true, force: true });
 fs.cpSync(path.join(root, 'public'), out, { recursive: true });
 const lf = path.dirname(require.resolve('leaflet/dist/leaflet.js'));
 for (const f of ['leaflet.js', 'leaflet.css', 'images']) fs.cpSync(path.join(lf, f), path.join(out, 'vendor', 'leaflet', f), { recursive: true });
-fs.copyFileSync(path.join(root, 'cloudflare', '_worker.js'), path.join(out, '_worker.js'));
+const seed = fs.readFileSync(path.join(root, 'seed', 'arta-points.json'), 'utf8');
+const worker = fs.readFileSync(path.join(root, 'cloudflare', '_worker.js'), 'utf8');
+if (!worker.includes('/*__SEED__*/ null')) throw new Error('_worker.js: λείπει το /*__SEED__*/');
+fs.writeFileSync(path.join(out, '_worker.js'), worker.replace('/*__SEED__*/ null', JSON.stringify(JSON.parse(seed))));
 
 // Μόνο το API και οι φωτογραφίες περνούν από τον worker· τα υπόλοιπα σερβίρονται στατικά (δωρεάν).
 fs.writeFileSync(path.join(out, '_routes.json'), JSON.stringify({ version: 1, include: ['/api/*', '/photos/*'], exclude: [] }, null, 2));

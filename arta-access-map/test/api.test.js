@@ -15,7 +15,7 @@ const PNG = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR
 
 before(async () => {
   tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'arta-'));
-  const app = createApp({ dbFile: path.join(tmp, 'db.sqlite'), uploadDir: path.join(tmp, 'up'), adminEmail: ADMIN.email, adminPassword: ADMIN.password });
+  const app = createApp({ dbFile: path.join(tmp, 'db.sqlite'), uploadDir: path.join(tmp, 'up'), adminEmail: ADMIN.email, adminPassword: ADMIN.password, seed: false });
   await new Promise((r) => { server = app.listen(0, r); });
   base = `http://127.0.0.1:${server.address().port}`;
 });
@@ -176,4 +176,26 @@ test('μετατροπή δεδομένων OpenStreetMap', () => {
   assert.equal(pts[2].name, 'Θέση στάθμευσης ΑμεΑ');
   assert.deepEqual(pts[2].features, ['parking']);
   assert.equal(pts[3], null); // χωρίς όνομα → παραλείπεται
+});
+
+test('τα γνωστά σημεία φορτώνονται μία φορά και δεν ξαναεμφανίζονται αν διαγραφούν', async () => {
+  const { openDb } = require('../src/db');
+  const { seedPoints, loadSeed } = require('../src/seed');
+  const { BOUNDS, CATEGORIES, FEATURES, LEVELS } = require('../src/constants');
+  const seed = loadSeed();
+  assert.ok(seed.points.length > 20);
+  for (const p of seed.points) {
+    assert.ok(CATEGORIES[p.category], p.name);
+    assert.ok(LEVELS[p.level], p.name);
+    assert.ok(p.features.every((f) => FEATURES[f]), p.name);
+    assert.ok(p.lat >= BOUNDS.minLat && p.lat <= BOUNDS.maxLat && p.lng >= BOUNDS.minLng && p.lng <= BOUNDS.maxLng, p.name);
+  }
+  assert.equal(new Set(seed.points.map((p) => p.externalId)).size, seed.points.length);
+  const db = openDb(':memory:');
+  assert.equal(seedPoints(db, seed), seed.points.length);
+  db.prepare("DELETE FROM points WHERE external_id = ?").run(seed.points[0].externalId);
+  assert.equal(seedPoints(db, seed), 0);
+  assert.equal(db.prepare("SELECT COUNT(*) n FROM points WHERE status = 'approved'").get().n, seed.points.length - 1);
+  // νέα έκδοση: προστίθενται μόνο όσα λείπουν
+  assert.equal(seedPoints(db, { ...seed, version: seed.version + 1 }), 1);
 });

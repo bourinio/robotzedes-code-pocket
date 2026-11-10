@@ -1,6 +1,12 @@
 /* Χάρτης προσβασιμότητας Άρτας – δημόσια σελίδα */
 'use strict';
 
+const SOURCE_LABEL = {
+  osm: 'OpenStreetMap (© συντελεστές OpenStreetMap, ODbL)',
+  sap: 'Σχέδιο Αστικής Προσβασιμότητας Δήμου Αρταίων (2023)',
+  dimos: 'Δήμος Αρταίων',
+};
+
 const state = { cfg: null, user: null, points: [], markers: new Map(), picking: false, pickMarker: null };
 let map;
 
@@ -181,7 +187,7 @@ async function openPoint(id) {
         : h('button', { type: 'button', class: 'btn', onclick: () => { $('#dlg-point').close(); openAuth(); } }, 'Συνδέσου για να προσθέσεις φωτογραφία'),
       fileInput
     ),
-    p.source === 'osm' ? h('p', { class: 'muted small', text: 'Πηγή: OpenStreetMap' }) : null
+    SOURCE_LABEL[p.source] ? h('p', { class: 'muted small', text: `Πηγή: ${SOURCE_LABEL[p.source]}` }) : null
   );
   history.replaceState(null, '', `#p${id}`);
   const dlg = $('#dlg-point');
