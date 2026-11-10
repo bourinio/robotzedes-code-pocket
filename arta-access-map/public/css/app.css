@@ -190,3 +190,6 @@ th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--bor
 th { font-size: .9rem; color: var(--muted); }
 .osm-box { margin-top: 24px; }
 .osm-box summary { cursor: pointer; min-height: 32px; }
+.banner { padding: 10px 16px; font-size: .95rem; border-bottom: 1px solid var(--border); }
+.banner.warn { background: #fef0c7; color: #7a2e0e; }
+.banner.error { background: #fee4e2; color: #912018; }

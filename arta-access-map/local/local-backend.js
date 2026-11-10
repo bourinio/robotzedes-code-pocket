@@ -24,15 +24,22 @@
   let data; // { seq, users:[], points:[], photos:[] } – οι φωτογραφίες (blob) είναι σε χωριστό store
   const urlCache = new Map();
 
+  // Αν ο browser δεν επιτρέπει αποθήκευση (π.χ. Firefox/Safari σε τοπικό αρχείο, ιδιωτικό παράθυρο),
+  // η εφαρμογή δουλεύει «στη μνήμη»: όλα φαίνονται κανονικά, αλλά οι αλλαγές χάνονται όταν κλείσει η σελίδα.
+  let memoryMode = false;
+  const memBlobs = new Map();
+
   function openIdb() {
     return new Promise((resolve, reject) => {
+      const timer = setTimeout(() => reject(new Error('timeout')), 4000);
       const req = indexedDB.open(DB_NAME, 1);
       req.onupgradeneeded = () => {
         req.result.createObjectStore('kv');
         req.result.createObjectStore('blobs');
       };
-      req.onsuccess = () => resolve(req.result);
-      req.onerror = () => reject(req.error);
+      req.onsuccess = () => { clearTimeout(timer); resolve(req.result); };
+      req.onerror = () => { clearTimeout(timer); reject(req.error); };
+      req.onblocked = () => { clearTimeout(timer); reject(new Error('blocked')); };
     });
   }
   function idbReq(store, mode, fn) {
@@ -44,18 +51,37 @@
       tx.onabort = () => reject(tx.error || new Error('Αποτυχία αποθήκευσης'));
     });
   }
-  const save = () => idbReq('kv', 'readwrite', (s) => s.put(data, 'data'));
-  const putBlob = (id, blob) => idbReq('blobs', 'readwrite', (s) => s.put(blob, id));
-  const getBlob = (id) => idbReq('blobs', 'readonly', (s) => s.get(id));
-  const delBlob = (id) => { const u = urlCache.get(id); if (u) { URL.revokeObjectURL(u); urlCache.delete(id); } return idbReq('blobs', 'readwrite', (s) => s.delete(id)); };
+  const save = () => (memoryMode ? Promise.resolve() : idbReq('kv', 'readwrite', (s) => s.put(data, 'data')));
+  const putBlob = (id, blob) => (memoryMode ? (memBlobs.set(id, blob), Promise.resolve()) : idbReq('blobs', 'readwrite', (s) => s.put(blob, id)));
+  const getBlob = (id) => (memoryMode ? Promise.resolve(memBlobs.get(id)) : idbReq('blobs', 'readonly', (s) => s.get(id)));
+  const delBlob = (id) => {
+    const u = urlCache.get(id);
+    if (u) { URL.revokeObjectURL(u); urlCache.delete(id); }
+    if (memoryMode) { memBlobs.delete(id); return Promise.resolve(); }
+    return idbReq('blobs', 'readwrite', (s) => s.delete(id));
+  };
+
+  // localStorage μπορεί επίσης να είναι μπλοκαρισμένο – κρατάμε αντίγραφο στη μνήμη
+  const memLs = new Map();
+  const ls = {
+    get(k) { try { return localStorage.getItem(k); } catch { return memLs.has(k) ? memLs.get(k) : null; } },
+    set(k, v) { memLs.set(k, v); try { localStorage.setItem(k, v); } catch { /* μόνο στη μνήμη */ } },
+    remove(k) { memLs.delete(k); try { localStorage.removeItem(k); } catch { /* μόνο στη μνήμη */ } },
+  };
 
   let ready;
   function init() {
     if (!ready) {
       ready = (async () => {
-        if (!window.indexedDB) throw new HttpError(500, 'Ο browser δεν υποστηρίζει τοπική αποθήκευση. Δοκιμάστε Chrome, Edge ή Firefox.');
-        idb = await openIdb();
-        data = (await idbReq('kv', 'readonly', (s) => s.get('data'))) || { seq: 0, users: [], points: [], photos: [] };
+        try {
+          if (!window.indexedDB) throw new Error('no indexedDB');
+          idb = await openIdb();
+          data = (await idbReq('kv', 'readonly', (s) => s.get('data'))) || { seq: 0, users: [], points: [], photos: [] };
+        } catch (e) {
+          console.warn('Τοπική αποθήκευση μη διαθέσιμη – λειτουργία μνήμης', e);
+          memoryMode = true;
+          data = { seq: 0, users: [], points: [], photos: [] };
+        }
         // Γνωστά προσβάσιμα σημεία: προστίθενται μία φορά ανά έκδοση (όσα έσβησε ο διαχειριστής δεν ξαναμπαίνουν)
         if (SEED && (data.seedVersion || 0) < SEED.version) {
           const have = new Set(data.points.map((p) => p.externalId).filter(Boolean));
@@ -189,7 +215,7 @@
   // ---------- δρομολόγηση ----------
   async function route(method, path, body, form) {
     await init();
-    const uid = Number(localStorage.getItem(UID_KEY)) || 0;
+    const uid = Number(ls.get(UID_KEY)) || 0;
     const user = data.users.find((u) => u.id === uid) || null;
     const isAdmin = user?.role === 'admin';
     const needUser = () => { if (!user) throw new HttpError(401, 'Απαιτείται σύνδεση.'); };
@@ -211,7 +237,7 @@
       const u = { id: nextId(), name, email, role: data.users.length === 0 ? 'admin' : 'user', passwordHash: await hashPassword(password), createdAt: now() };
       data.users.push(u);
       await save();
-      localStorage.setItem(UID_KEY, String(u.id));
+      ls.set(UID_KEY, String(u.id));
       return { user: publicUser(u) };
     }
 
@@ -219,12 +245,12 @@
       const u = data.users.find((x) => x.email === str(body.email, 200).toLowerCase());
       if (!u || !(await verifyPassword(typeof body.password === 'string' ? body.password : '', u.passwordHash)))
         throw new HttpError(401, 'Λάθος email ή κωδικός.');
-      localStorage.setItem(UID_KEY, String(u.id));
+      ls.set(UID_KEY, String(u.id));
       return { user: publicUser(u) };
     }
 
     if (pathname === '/auth/logout' && method === 'POST') {
-      localStorage.removeItem(UID_KEY);
+      ls.remove(UID_KEY);
       return { ok: true };
     }
 
@@ -402,7 +428,7 @@
       data = body.data;
       // ο τρέχων διαχειριστής δεν «κλειδώνεται» έξω
       if (!data.users.some((u) => u.email === me.email)) { me.id = ++data.seq; data.users.push(me); }
-      localStorage.setItem(UID_KEY, String(data.users.find((u) => u.email === me.email).id));
+      ls.set(UID_KEY, String(data.users.find((u) => u.email === me.email).id));
       await save();
       for (const ph of data.photos) await photoUrl(ph.id);
       return { points: data.points.length, photos: data.photos.length };
@@ -426,6 +452,7 @@
   }
 
   window.LocalBackend = {
+    get memoryMode() { return memoryMode; },
     async request(method, path, { body, form } = {}) {
       try {
         return await route(method, path, body || {}, form);

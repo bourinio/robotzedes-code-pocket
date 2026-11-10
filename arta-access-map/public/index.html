@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="css/app.css">
 </head>
 <body>
+  <noscript><p class="banner error">Η εφαρμογή χρειάζεται JavaScript.</p></noscript>
   <a class="skip" href="#list">Μετάβαση στη λίστα σημείων</a>
 
   <header class="topbar">
@@ -19,6 +20,13 @@
     </nav>
   </header>
 
+  <div id="storage-warning" class="banner warn" role="status" hidden>
+    Ο browser δεν επιτρέπει αποθήκευση σε αυτό το αρχείο: βλέπεις κανονικά τα σημεία, αλλά ό,τι προσθέσεις θα χαθεί
+    όταν κλείσεις τη σελίδα. Για μόνιμη αποθήκευση άνοιξε το αρχείο με <strong>Chrome</strong> ή <strong>Edge</strong> (όχι σε ιδιωτικό παράθυρο).
+  </div>
+  <div id="fatal" class="banner error" role="alert" hidden>
+    Η εφαρμογή δεν μπόρεσε να ξεκινήσει: <span id="fatal-msg"></span>
+  </div>
   <main class="layout">
     <aside class="sidebar" aria-label="Αναζήτηση και φίλτρα">
       <label class="field">

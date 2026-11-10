@@ -28,18 +28,43 @@ const seed = JSON.parse(fs.readFileSync(path.join(root, 'seed', 'arta-points.jso
 backend = backend.replace('/*__CONFIG__*/ null', JSON.stringify(config)).replace('/*__SEED__*/ null', JSON.stringify(seed)).replace('/*__OSM__*/', osmCode);
 fs.writeFileSync(path.join(out, 'js', 'local-backend.js'), backend);
 
+// Κάθε σελίδα γίνεται ΑΥΤΟΝΟΜΗ: CSS, JavaScript και εικονίδια ενσωματώνονται μέσα στο HTML,
+// ώστε να δουλεύει ακόμα κι αν ανοιχτεί μόνο το ένα αρχείο (π.χ. μέσα από το zip).
+const read = (rel) => fs.readFileSync(path.join(out, rel), 'utf8');
+const dataUri = (rel) => `data:image/png;base64,${fs.readFileSync(path.join(out, rel)).toString('base64')}`;
+const safeJs = (js) => js.replace(/<\/script/gi, '<\\/script');
+const leafletCss = read('vendor/leaflet/leaflet.css').replace(/url\((images\/[\w@.-]+\.png)\)/g, (_, f) => `url(${dataUri('vendor/leaflet/' + f)})`);
+const iconFix = `L.Icon.Default.imagePath = '';
+L.Icon.Default.mergeOptions({ iconUrl: '${dataUri('vendor/leaflet/images/marker-icon.png')}',
+  iconRetinaUrl: '${dataUri('vendor/leaflet/images/marker-icon-2x.png')}', shadowUrl: '${dataUri('vendor/leaflet/images/marker-shadow.png')}' });`;
+
 for (const page of ['index.html', 'admin.html']) {
-  const file = path.join(out, page);
-  const html = fs.readFileSync(file, 'utf8');
-  if (!html.includes('<script src="js/common.js"></script>')) throw new Error(`${page}: δεν βρέθηκε το common.js`);
-  fs.writeFileSync(file, html.replace('<script src="js/common.js"></script>', '<script src="js/local-backend.js"></script>\n  <script src="js/common.js"></script>'));
+  let html = read(page);
+  const swaps = [
+    ['<link rel="stylesheet" href="vendor/leaflet/leaflet.css">', `<style>${leafletCss}</style>`],
+    ['<link rel="stylesheet" href="css/app.css">', `<style>${read('css/app.css')}</style>`],
+    ['<script src="vendor/leaflet/leaflet.js"></script>', `<script>${safeJs(read('vendor/leaflet/leaflet.js'))}\n${iconFix}</script>`],
+    ['<script src="js/common.js"></script>', `<script>${safeJs(read('js/local-backend.js'))}</script>\n  <script>${safeJs(read('js/common.js'))}</script>`],
+    [page === 'index.html' ? '<script src="js/app.js"></script>' : '<script src="js/admin.js"></script>',
+      `<script>${safeJs(read(page === 'index.html' ? 'js/app.js' : 'js/admin.js'))}</script>`],
+  ];
+  for (const [from, to] of swaps) {
+    if (!html.includes(from)) throw new Error(`${page}: δεν βρέθηκε ${from}`);
+    html = html.replace(from, () => to);
+  }
+  if (/<(script|link)[^>]+(src|href)="(js|css|vendor)\//.test(html)) throw new Error(`${page}: έμεινε εξωτερικό αρχείο`);
+  fs.writeFileSync(path.join(out, page), html);
 }
+// Τα ξεχωριστά αρχεία δεν χρειάζονται πια
+for (const d of ['js', 'css', 'vendor']) fs.rmSync(path.join(out, d), { recursive: true, force: true });
 
 fs.writeFileSync(path.join(out, 'ΔΙΑΒΑΣΕ-ΜΕ.txt'), `ΠΡΟΣΒΑΣΙΜΗ ΑΡΤΑ – τοπική έκδοση
 ================================
 
-1. Κάνε διπλό κλικ στο αρχείο index.html (ανοίγει στον browser).
-   Καλύτερα με Chrome, Edge ή Firefox. Χρειάζεται ίντερνετ μόνο για να φαίνεται ο χάρτης.
+1. Κάνε «Εξαγωγή όλων» του zip και μετά διπλό κλικ στο index.html (ανοίγει στον browser).
+   Καλύτερα με Chrome ή Edge: εκεί οι αλλαγές σου αποθηκεύονται μόνιμα.
+   (Σε Firefox/Safari ή σε ιδιωτικό παράθυρο βλέπεις τα σημεία, αλλά οι αλλαγές χάνονται όταν κλείσει.)
+   Χρειάζεται ίντερνετ μόνο για να φαίνεται ο χάρτης (δρόμοι).
 2. Πάτα «Σύνδεση» → «Νέος λογαριασμός».
    Ο ΠΡΩΤΟΣ λογαριασμός που φτιάχνεται γίνεται ΔΙΑΧΕΙΡΙΣΤΗΣ.
 3. Πρόσθεσε σημεία με το «+ Πρόσθεσε σημείο». Ως διαχειριστής τα εγκρίνεις από το κουμπί «Διαχείριση».

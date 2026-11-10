@@ -10,7 +10,12 @@ const SOURCE_LABEL = {
 const state = { cfg: null, user: null, points: [], markers: new Map(), picking: false, pickMarker: null };
 let map;
 
-init().catch((e) => toast(e.message));
+init().catch((e) => {
+  console.error(e);
+  const box = $('#fatal');
+  if (box) { box.hidden = false; $('#fatal-msg').textContent = e.message || String(e); }
+  else toast(e.message);
+});
 
 async function init() {
   const [cfg, me] = await Promise.all([api('/config'), api('/auth/me')]);
@@ -23,6 +28,9 @@ async function init() {
   setupAdd();
   renderUser();
   await loadPoints();
+  if (window.LocalBackend?.memoryMode) {
+    $('#storage-warning').hidden = false;
+  }
 
   const m = location.hash.match(/^#p(\d+)$/);
   if (m) openPoint(Number(m[1]));
